@@ -16,7 +16,7 @@ class User(db.Model):
           news = db.relationship("News", backref="user", passive_deletes=True)
           blogs = db.relationship("Business", backref="user", passive_deletes=True)
           blogs = db.relationship("Sports", backref="user", passive_deletes=True)
-          blogs = db.relationship("Entainment", backref="user", passive_deletes=True)
+          blogs = db.relationship("Entertainment", backref="user", passive_deletes=True)
 
 
           def user_dict(self):
@@ -34,6 +34,7 @@ class News(db.Model):
         id = db.Column(db.Integer, primary_key=True, index=True)
         title = db.Column(db.String(50), nullable=False)
         slug = db.Column(db.String(100), nullable=False)
+        image_id = db.Column(db.String(100), nullable=False)
         body = db.Column(db.Text, nullable=False)
         date_created = db.Column(db.DateTime, default=datetime.now())
         published_on = db.Column(db.DateTime, default = datetime.now(), onupdate=datetime.now())
@@ -43,6 +44,7 @@ class Business(db.Model):
         id = db.Column(db.Integer, primary_key=True, index=True)
         title = db.Column(db.String(100), nullable=False)
         slug = db.Column(db.String(100), nullable=False)
+        image_id = db.Column(db.String(100), nullable=False)
         body = db.Column(db.Text, nullable=False)
         date_created = db.Column(db.DateTime, default=datetime.now())
         published_on = db.Column(db.DateTime, default = datetime.now(), onupdate=datetime.now())
@@ -53,6 +55,7 @@ class Sports(db.Model):
         id = db.Column(db.Integer, primary_key=True, index=True)
         title = db.Column(db.String(100), nullable=False)
         slug = db.Column(db.String(100), nullable=False)
+        image_id = db.Column(db.String(100), nullable=False)
         body = db.Column(db.Text, nullable=False)
         date_created = db.Column(db.DateTime, default=datetime.now())
         published_on = db.Column(db.DateTime, default = datetime.now(), onupdate=datetime.now())
@@ -63,6 +66,7 @@ class Entertainment(db.Model):
         id = db.Column(db.Integer, primary_key=True, index=True)
         title = db.Column(db.String(100), nullable=False)
         slug = db.Column(db.String(100), nullable=False)
+        image_id = db.Column(db.String(100), nullable=False)
         body = db.Column(db.Text, nullable=False)
         date_created = db.Column(db.DateTime, default=datetime.now())
         published_on = db.Column(db.DateTime, default = datetime.now(), onupdate=datetime.now())

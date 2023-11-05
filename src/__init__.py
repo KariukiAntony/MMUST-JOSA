@@ -3,7 +3,7 @@ from src.config.config import config_dict
 from src.models.database import db, migrate, User
 from os import path
 from src.auth.auth import auth
-from src.views.views import views
+from src.views.blogs import blogs
 from flask_login import LoginManager
 
 login_manager = LoginManager()
@@ -30,7 +30,7 @@ def create_app(config = config_dict["dev"]):
          return jsonify({"error": str(e)})
      
      app.register_blueprint(auth)
-     app.register_blueprint(views)
+     app.register_blueprint(blogs)
  
      @login_manager.user_loader
      def load_user(user_id):
