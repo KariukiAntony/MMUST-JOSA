@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, Response
+from flask import Blueprint, request, jsonify, Response, json
 from src.models.database import User, News, Business, Sports, Entertainment
 
 blogs = Blueprint("view", __name__, url_prefix="/")
@@ -8,7 +8,7 @@ def home_page():
     page = request.args.get("page", 1, type=int)
     per_page = request.args.get("pages", 3, type=int)
 
-    response = Response(response=jsonify({
+    response = Response(response=json.dumps({
             
             "News": get_brief_home_news(News,page, per_page),
             "Business": get_brief_home_news(Business, page, per_page),
@@ -21,92 +21,69 @@ def home_page():
     return response
 
 
-""" A module to get all the news blogs in the database """
+""" An endpoint to get all the news blogs in the database """
 @blogs.route("/news")
 def get_all_news_blogs():
 
-        all_news = News.query.order_by(News.id.desc()).all()
-        serialized = []
-        for news in all_news:
-                user = User.query.filter_by(id=news.author_id).first()
-                serialized.append(
-                        {
-                                "title": news.title,
-                                "slug": news.slug,
-                                "image_id": news.image_id,
-                                "body": news.body,
-                                "date_created": news.date_created,
-                                "published_on": news.published_on,
-                                "author":f"{user.first_name} {user.last_name}"
-                        }
-                )
-        return serialized, 200
+        all_news = get_all_blogs_with_category(model=News)
+        return all_news, 200
 
-""" A module to get all the business blogs in the database """
+""" An endpoint to get all the business blogs in the database """
 @blogs.route("/business")
 def get_all_business_blogs():
 
-          all_business = Business.query.order_by(Business.id.desc()).all()
-          serialized = []
-          for business in all_business:
-                  user = User.query.filter_by(id=business.author_id).first()
-                  serialized.append(
-                          {
-                                  "title": business.title,
-                                  "slug": business.slug,
-                                  "image_id": business.image_id,
-                                  "body": business.body,
-                                  "date_created": business.date_created,
-                                  "published_on": business.published_on,
-                                  "author":f"{user.first_name} {user.last_name}"
-                          }
-                  )
-          return serialized, 200
+        all_business = get_all_blogs_with_category(model=Business)
 
-""" A module to get all the Sports blogs in the database """
+        return  all_business, 200
+
+
+""" An endpoint to get all the Sports blogs in the database """
 @blogs.route("/sports")
 def get_all_sports_blogs():
 
-          all_sports = Sports.query.order_by(Sports.id.desc()).all()
-          serialized = []
-          for sport in all_sports:
-                  user = User.query.filter_by(id=sport.author_id).first()
-                  serialized.append(
-                          {
-                                  "title": sport.title,
-                                  "slug": sport.slug,
-                                  "image_id": sport.image_id,
-                                  "body": sport.body,
-                                  "date_created": sport.date_created,
-                                  "published_on": sport.published_on,
-                                  "author":f"{user.first_name} {user.last_name}"
-                          }
-                  )
-          return serialized, 200
+        all_sports = get_all_blogs_with_category(model=Sports)
+        
+        return all_sports, 200
 
-""" A module to get all the entertainment blogs in the database """
+
+""" An endpoint to get all the entertainment blogs in the database """
 @blogs.route("/entertainment")
 def get_all_entertainment_blogs():
 
-          all_entertainment = Entertainment.query.order_by(Entertainment.id.desc()).all()
-          serialized = []
-          for entertainment in all_entertainment:
-                  user = User.query.filter_by(id=entertainment.author_id).first()
-                  serialized.append(
-                          {
-                                  "title": entertainment.title,
-                                  "slug": entertainment.slug,
-                                  "image_id": entertainment.image_id,
-                                  "body": entertainment.body,
-                                  "date_created": entertainment.date_created,
-                                  "published_on": entertainment.published_on,
-                                  "author":f"{user.first_name} {user.last_name}"
-                          }
-                  )
+        all_entertainment = get_all_blogs_with_category(model=Entertainment)
 
-          return serialized, 200
+        return all_entertainment, 200
 
-""" This is a function to query and return the brief news found in the home page """
+
+""" An endpoint to get the data associated with and image """
+@blogs.route('/blogs/<string:category>/<string:image_id>')
+def get_all_info(category, image_id): 
+        cat = return_blog_category(category)           
+        if cat is None:
+                return jsonify({"erro": "Invalid category"}), 400
+        
+        return "Hello world"
+
+
+
+""" This is a function to query and return all 
+    the blogs associated with a certain category   """
+def get_all_blogs_with_category(model)-> list:
+        all_blogs = model.query.order_by(model.id.desc()).all()
+        serialized = []
+        for blog in all_blogs:
+                serialized.append(
+                        {
+                                "title": blog.title,
+                                "image_id": blog.image_id,
+                                "published_on": blog.published_on,
+                        }
+                )
+        
+        return serialized
+
+""" This is a function to query and return the 
+    brief news found in the home page         """
 def get_brief_home_news(model, page, per_page):
         blogs = model.query.order_by(model.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
         serialized = []
@@ -119,6 +96,14 @@ def get_brief_home_news(model, page, per_page):
         
         return serialized
 
+def return_blog_category(category) -> str:
+        categories = ["News", "Business", "Sports", "Entertainment"]
+        category_alpha = category[0].upper()
+        model_ = " "
+        for cat in categories:
+                if cat.startswith(category_alpha):
+                        return cat
+        return None
           
 # """ A module to create  a blog """
 # @blogs.route("/createblog", methods=["POST"])
