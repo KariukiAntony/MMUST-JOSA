@@ -35,6 +35,7 @@ def register_user():
                     
                     db.session.add(new_user)
                     db.session.commit()
+                    return new_user.user_dict()
                     return jsonify({"first_name": request_data["first_name"],
                               "last_name": request_data["last_name"],
                               "email": request_data["email"],

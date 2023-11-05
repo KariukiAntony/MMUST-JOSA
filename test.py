@@ -3,7 +3,7 @@ import requests, json
 
 def register_user():
         
-        url = "http://studentcrud1.pythonanywhere.com/api/auth/register"
+        url = "http://127.0.0.1:5000/api/auth/register"
 
         headers = {
                

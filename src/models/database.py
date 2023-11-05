@@ -14,7 +14,10 @@ class User(UserMixin, db.Model):
           email = db.Column(db.String(30), unique=True)
           password = db.Column(db.String(30), nullable=False)
           date_created = db.Column(db.DateTime, default=datetime.now())
-          blogs = db.relationship("Blogs", backref="user", passive_deletes=True)
+          news = db.relationship("News", backref="user", passive_deletes=True)
+          blogs = db.relationship("Business", backref="user", passive_deletes=True)
+          blogs = db.relationship("Sports", backref="user", passive_deletes=True)
+          blogs = db.relationship("Entainment", backref="user", passive_deletes=True)
 
 
           def user_dict(self):
@@ -24,25 +27,43 @@ class User(UserMixin, db.Model):
                     'first_name': self.first_name,
                     'last_name': self.last_name,
                     'email': self.email,
-                    'date_created': self.date_created.isoformat(),
+                    'date_created': self.date_created,
                     }
 
 
-class Blogs(db.Model):
+class News(db.Model):
         id = db.Column(db.Integer, primary_key=True, index=True)
-        title = db.Column(db.String(30), nullable=False)
-        category = db.Column(db.String(100), nullable=True)
-        content = db.Column(db.String(500), nullable=False)
+        title = db.Column(db.String(100), nullable=False)
+        body = db.Column(db.Text, nullable=False)
+        date_created = db.Column(db.DateTime, default=datetime.now())
+        updated_at = db.Column(db.DateTime, default = datetime.now(), onupdate=datetime.now())
+        owner_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+        
+class Business(db.Model):
+        id = db.Column(db.Integer, primary_key=True, index=True)
+        title = db.Column(db.String(100), nullable=False)
+        body = db.Column(db.Text, nullable=False)
         date_created = db.Column(db.DateTime, default=datetime.now())
         updated_at = db.Column(db.DateTime, default = datetime.now(), onupdate=datetime.now())
         owner_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 
-        def blogs_dict(self):
-          return {
-                    'id': self.id,
-                    'title': self.title,
-                    'content': self.content,
-                    'category': self.category,
-                    'date_created': self.date_created.isoformat(),
-                    'updatedAt': self.updated_at.isoformat()
-          }
+
+class Sports(db.Model):
+        id = db.Column(db.Integer, primary_key=True, index=True)
+        title = db.Column(db.String(100), nullable=False)
+        body = db.Column(db.Text, nullable=False)
+        date_created = db.Column(db.DateTime, default=datetime.now())
+        updated_at = db.Column(db.DateTime, default = datetime.now(), onupdate=datetime.now())
+        owner_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+
+
+        
+class Entainment(db.Model):
+        id = db.Column(db.Integer, primary_key=True, index=True)
+        title = db.Column(db.String(100), nullable=False)
+        body = db.Column(db.Text, nullable=False)
+        date_created = db.Column(db.DateTime, default=datetime.now())
+        updated_at = db.Column(db.DateTime, default = datetime.now(), onupdate=datetime.now())
+        owner_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+
+
