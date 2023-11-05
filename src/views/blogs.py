@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Response
 from src.models.database import User, News, Business, Sports, Entertainment
 
 blogs = Blueprint("view", __name__, url_prefix="/")
@@ -7,8 +7,18 @@ blogs = Blueprint("view", __name__, url_prefix="/")
 def home_page():
     page = request.args.get("page", 1, type=int)
     per_page = request.args.get("pages", 3, type=int)
-    home_news = Business.query.order_by(Business.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
-    return jsonify("Hello world")
+
+    response = Response(response=jsonify({
+            
+            "News": get_brief_home_news(News,page, per_page),
+            "Business": get_brief_home_news(Business, page, per_page),
+            "Sports": get_brief_home_news(Sports, page, per_page),
+            "Entertainment": get_brief_home_news(Entertainment, page, per_page)
+
+    }), status=200, 
+    mimetype="application/json")
+
+    return response
 
 
 """ A module to get all the news blogs in the database """
@@ -95,6 +105,20 @@ def get_all_entertainment_blogs():
                   )
 
           return serialized, 200
+
+""" This is a function to query and return the brief news found in the home page """
+def get_brief_home_news(model, page, per_page):
+        blogs = model.query.order_by(model.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
+        serialized = []
+        for blog in blogs:
+                serialized.append({
+                        "image_id": blog.image_id,
+                        "author": f"{blog.first_name} {blog.last_name}",
+                        "title": blog.title
+                })
+        
+        return serialized
+
           
 # """ A module to create  a blog """
 # @blogs.route("/createblog", methods=["POST"])
