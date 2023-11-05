@@ -54,15 +54,29 @@ def get_all_entertainment_blogs():
 
         return all_entertainment, 200
 
-
 """ An endpoint to get the data associated with and image """
 @blogs.route('/blogs/<string:category>/<string:image_id>')
 def get_all_info(category, image_id): 
-        cat = return_blog_category(category)           
-        if cat is None:
-                return jsonify({"erro": "Invalid category"}), 400
+        error_mesage = {"error": "The category deos not exist"}          
+        if category == "News":
+                data = get_blog_info (News, image_id)
+                if data:
+                       return data, 200
+                return jsonify(error_mesage)
+        elif category == "Business":
+                data = get_blog_info (Business, image_id)
+                if data:
+                       return data, 200
+                return jsonify(error_mesage)
         
-        return cat
+        elif category == "Sports":
+                data = get_blog_info (Sports, image_id)
+                if data:
+                       return data, 200
+                return jsonify(error_mesage)
+
+        elif category == "Entertainment":
+                return (get_blog_info (Entertainment, image_id))
 
 
 
@@ -96,14 +110,21 @@ def get_brief_home_news(model, page, per_page):
         
         return serialized
 
-def return_blog_category(category) -> str:
-        categories = ["News", "Business", "Sports", "Entertainment"]
-        category_alpha = category[0].upper()
-        for cat in categories:
-                if cat.startswith(category_alpha):
-                        return cat
-        return None
-          
+""" A function to get the all the data of an blog  """
+
+def get_blog_info (category, image_id):
+        data = category.query.filter_by(image_id=image_id).first()
+        print(data)
+        author = User.query.filter_by(id=data.id).first()
+        return jsonify({
+        "title": data.title,
+        "author": f"{author.first_name} {author.last_name}",
+        "published on": data.published_on,
+        "image_id": data.image_id
+})
+
+
+
 # """ A module to create  a blog """
 # @blogs.route("/createblog", methods=["POST"])
 # @login_required
