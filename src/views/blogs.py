@@ -62,7 +62,7 @@ def get_all_info(category, image_id):
         if cat is None:
                 return jsonify({"erro": "Invalid category"}), 400
         
-        return "Hello world"
+        return cat
 
 
 
@@ -99,7 +99,6 @@ def get_brief_home_news(model, page, per_page):
 def return_blog_category(category) -> str:
         categories = ["News", "Business", "Sports", "Entertainment"]
         category_alpha = category[0].upper()
-        model_ = " "
         for cat in categories:
                 if cat.startswith(category_alpha):
                         return cat
