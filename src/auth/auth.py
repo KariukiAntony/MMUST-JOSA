@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify
 from src.models.database import User, db
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
-from flask_login import login_user
 
 auth = Blueprint("auth", __name__, url_prefix="/api/auth")
 
@@ -35,12 +34,7 @@ def register_user():
                     
                     db.session.add(new_user)
                     db.session.commit()
-                    return new_user.user_dict()
-                    return jsonify({"first_name": request_data["first_name"],
-                              "last_name": request_data["last_name"],
-                              "email": request_data["email"],
-                              "password": request_data["password"], 
-                              }), 201
+                    return new_user.user_dict(), 201
 
           return jsonify({"failed": "email already taken"}), 409
 
@@ -56,7 +50,7 @@ def login_blogger():
         existing_email = check_login_password(user_login_info["email"], user_login_info["password"])
         if existing_email:
             user = User.query.filter_by(email=user_login_info["email"]).first()
-            login_user(user, remember=True)
+            # login_user(user, remember=True)
 
             return jsonify({"success": "login successful"}), 200
 
