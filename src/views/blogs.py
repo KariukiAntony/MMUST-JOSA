@@ -122,8 +122,10 @@ def create_get_all_user_blogs(fullname):
                sports_blogs = get_user_blogs_based_on_category(all_blogs.sports)
                entertainment_blogs = get_user_blogs_based_on_category(all_blogs.entertainment)
                combined_blogs = news_blogs+business_blogs+sports_blogs+entertainment_blogs
+               total_blogs = len(news_blogs) + len(business_blogs) + len(sports_blogs) + len(entertainment_blogs)
                 
-               return combined_blogs, 200
+               return {total_blogs: combined_blogs}, 200
+               return total_blogs,combined_blogs, 200
         else:
             return {"error": f"No user with username {first_name}"}, 400
 
@@ -136,12 +138,19 @@ def get_brief_home_news(model, page, per_page):
         for blog in blogs:
                 serialized.append({
                         "image_id": blog.image_id,
-                        "author": f"{blog.first_name} {blog.last_name}",
+                        "author": get_the_user_based_on_author_id(blog.author_id),
                         "title": blog.title
                 })
         
         return serialized
 
+""" A function to get the user associated with blogs in the home page """
+def get_the_user_based_on_author_id(author_id):
+       user = User.query.filter_by(id=author_id).first()
+       if user:
+              return f"{user.first_name} {user.last_name}"
+       
+       return None
 
 """ This is a function to query and return all 
     the blogs associated with a certain category   """

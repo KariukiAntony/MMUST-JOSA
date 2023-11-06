@@ -23,7 +23,7 @@ def create_app(config = config_dict["dev"]):
      
 
      @app.errorhandler(500)
-     def handle_not_found(e):
+     def handle_Internal_server_error(e):
          return jsonify({"error": str(e)})
      
      app.register_blueprint(auth)
