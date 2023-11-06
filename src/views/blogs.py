@@ -61,24 +61,37 @@ def get_all_entertainment_blogs():
 def get_all_info(category, image_id): 
         error_mesage = {"error": "The category deos not exist"}          
         if category == "News":
-                data = get_blog_info (News, image_id)
+                data = News.query.filter_by(image_id=image_id).first()
                 if data:
-                       return data, 200
-                return jsonify(error_mesage)
+                       author = User.query.filter_by(id=data.author_id).first()
+                       return jsonify({
+                        "title": data.title,
+                        "slug": data.slug,
+                        "image_id": data.image_id,
+                        "body": data.body,
+                        "author": f"{author.first_name} {author.last_name}",
+                        "published on": data.published_on
+                        })
+                
+                return jsonify({"error": f"Image with id {image_id} does not exist"}), 404
+        
         elif category == "Business":
                 data = get_blog_info (Business, image_id)
                 if data:
                        return data, 200
                 return jsonify(error_mesage)
         
-        elif category == "Sports":
-                data = get_blog_info (Sports, image_id)
-                if data:
-                       return data, 200
-                return jsonify(error_mesage)
+        # elif category == "Sports":
+        #         data = get_blog_info (Sports, image_id)
+        #         if data:
+        #                return data, 200
+        #         return jsonify(error_mesage)
 
-        elif category == "Entertainment":
-                return (get_blog_info (Entertainment, image_id))
+        # elif category == "Entertainment":
+        #         return (get_blog_info (Entertainment, image_id))
+        
+        else:
+            return jsonify({"error": "Invalid image_ID or category"}), 400
 
 
 
@@ -125,7 +138,7 @@ def create_get_all_user_blogs(fullname):
                total_blogs = len(news_blogs) + len(business_blogs) + len(sports_blogs) + len(entertainment_blogs)
                 
                return {total_blogs: combined_blogs}, 200
-               return total_blogs,combined_blogs, 200
+
         else:
             return {"error": f"No user with username {first_name}"}, 400
 
@@ -139,7 +152,8 @@ def get_brief_home_news(model, page, per_page):
                 serialized.append({
                         "image_id": blog.image_id,
                         "author": get_the_user_based_on_author_id(blog.author_id),
-                        "title": blog.title
+                        "title": blog.title,
+                        "published_on": blog.published_on
                 })
         
         return serialized
@@ -172,8 +186,8 @@ def get_all_blogs_with_category(model)-> list:
 """ A function to get the all the data of an blog  """
 def get_blog_info (category, image_id):
         data = category.query.filter_by(image_id=image_id).first()
-        print(data)
-        author = User.query.filter_by(id=data.id).first()
+        print(f"Id {data}")
+        author = User.query.filter_by(id=data.author_id).first()
         return jsonify({
         "title": data.title,
         "author": f"{author.first_name} {author.last_name}",

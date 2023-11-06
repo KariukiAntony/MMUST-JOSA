@@ -5,6 +5,8 @@ from flask_migrate import Migrate
 db = SQLAlchemy()
 migrate = Migrate()
 
+now = datetime.now()
+formatted = now.strftime("%Y-%m-%d %H:%M:%S")
 
 class User(db.Model):
           id = db.Column(db.Integer, primary_key = True, index=True)
@@ -12,7 +14,7 @@ class User(db.Model):
           last_name = db.Column(db.String(20), nullable=False)
           email = db.Column(db.String(30), unique=True)
           password = db.Column(db.String(30), nullable=False)
-          date_created = db.Column(db.DateTime, default=datetime.now)
+          date_created = db.Column(db.DateTime(timezone=True), default=datetime.now)
           news = db.relationship("News", backref="user", passive_deletes=True)
           business = db.relationship("Business", backref="user", passive_deletes=True)
           sports = db.relationship("Sports", backref="user", passive_deletes=True)
