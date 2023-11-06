@@ -43,7 +43,7 @@ def register_user():
           return jsonify({"failed": "email already taken"}), 409
 
 
-""" A module to login user """
+""" An endpoint to login user """
 @auth.post("/login")
 def login_blogger():
     if not request.content_type == "application/json":
