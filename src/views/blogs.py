@@ -56,67 +56,35 @@ def get_all_entertainment_blogs():
 
         return all_entertainment, 200
 
-""" An endpoint to get the data associated with and image """
+"""  An endpoint to get the data associated with and image   """
 @blogs.route('/blogs/<string:category>/<string:image_id>')
 def get_all_info(category, image_id): 
         error_mesage = {"error": "The category deos not exist"}          
         if category == "News":
-                data = News.query.filter_by(image_id=image_id).first()
+                data = get_blog_info (category=News, image_id=image_id)
                 if data:
-                       author = User.query.filter_by(id=data.author_id).first()
-                       return jsonify({
-                        "title": data.title,
-                        "slug": data.slug,
-                        "image_id": data.image_id,
-                        "body": data.body,
-                        "author": f"{author.first_name} {author.last_name}",
-                        "published on": data.published_on
-                        })
+                       return data, 200
                 
                 return jsonify({"error": f"Image with id {image_id} does not exist"}), 404
         
         elif category == "Business":
-                data = Business.query.filter_by(image_id=image_id).first()
+                data = get_blog_info (category=Business, image_id=image_id)
                 if data:
-                       author = User.query.filter_by(id=data.author_id).first()
-                       return jsonify({
-                        "title": data.title,
-                        "slug": data.slug,
-                        "image_id": data.image_id,
-                        "body": data.body,
-                        "author": f"{author.first_name} {author.last_name}",
-                        "published on": data.published_on
-                        })
+                       return data, 200
                 
                 return jsonify({"error": f"Image with id {image_id} does not exist"}), 404
         
         elif category == "Sports":
-                data = Sports.query.filter_by(image_id=image_id).first()
+                data = get_blog_info (category=News, image_id=image_id)
                 if data:
-                       author = User.query.filter_by(id=data.author_id).first()
-                       return jsonify({
-                        "title": data.title,
-                        "slug": data.slug,
-                        "image_id": data.image_id,
-                        "body": data.body,
-                        "author": f"{author.first_name} {author.last_name}",
-                        "published on": data.published_on
-                        })
+                       return data, 200
                 
                 return jsonify({"error": f"Image with id {image_id} does not exist"}), 404
 
         elif category == "Entertainment":
-                data = Entertainment.query.filter_by(image_id=image_id).first()
+                data = get_blog_info (category=News, image_id=image_id)
                 if data:
-                       author = User.query.filter_by(id=data.author_id).first()
-                       return jsonify({
-                        "title": data.title,
-                        "slug": data.slug,
-                        "image_id": data.image_id,
-                        "body": data.body,
-                        "author": f"{author.first_name} {author.last_name}",
-                        "published on": data.published_on
-                        })
+                       return data, 200
                 
                 return jsonify({"error": f"Image with id {image_id} does not exist"}), 404
         
@@ -183,6 +151,7 @@ def get_brief_home_news(model, page, per_page):
                         "image_id": blog.image_id,
                         "author": get_the_user_based_on_author_id(blog.author_id),
                         "title": blog.title,
+                        "slug": blog.slug,
                         "published_on": blog.published_on
                 })
         
@@ -216,14 +185,17 @@ def get_all_blogs_with_category(model)-> list:
 """ A function to get the all the data of an blog  """
 def get_blog_info (category, image_id):
         data = category.query.filter_by(image_id=image_id).first()
-        print(f"Id {data}")
         author = User.query.filter_by(id=data.author_id).first()
-        return jsonify({
-        "title": data.title,
-        "author": f"{author.first_name} {author.last_name}",
-        "published on": data.published_on,
-        "image_id": data.image_id
-})
+        return jsonify(
+               {
+                "title": data.title,
+                "slug": data.slug,
+                "image_id": data.image_id,
+                "body": data.body,
+                "author": f"{author.first_name} {author.last_name}",
+                "published on": data.published_on
+                }
+                )
 
 """ A function to validate blogs info """
 def validate_blog_data(user_input):
