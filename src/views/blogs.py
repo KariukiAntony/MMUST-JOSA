@@ -76,19 +76,49 @@ def get_all_info(category, image_id):
                 return jsonify({"error": f"Image with id {image_id} does not exist"}), 404
         
         elif category == "Business":
-                data = get_blog_info (Business, image_id)
+                data = Business.query.filter_by(image_id=image_id).first()
                 if data:
-                       return data, 200
-                return jsonify(error_mesage)
+                       author = User.query.filter_by(id=data.author_id).first()
+                       return jsonify({
+                        "title": data.title,
+                        "slug": data.slug,
+                        "image_id": data.image_id,
+                        "body": data.body,
+                        "author": f"{author.first_name} {author.last_name}",
+                        "published on": data.published_on
+                        })
+                
+                return jsonify({"error": f"Image with id {image_id} does not exist"}), 404
         
-        # elif category == "Sports":
-        #         data = get_blog_info (Sports, image_id)
-        #         if data:
-        #                return data, 200
-        #         return jsonify(error_mesage)
+        elif category == "Sports":
+                data = Sports.query.filter_by(image_id=image_id).first()
+                if data:
+                       author = User.query.filter_by(id=data.author_id).first()
+                       return jsonify({
+                        "title": data.title,
+                        "slug": data.slug,
+                        "image_id": data.image_id,
+                        "body": data.body,
+                        "author": f"{author.first_name} {author.last_name}",
+                        "published on": data.published_on
+                        })
+                
+                return jsonify({"error": f"Image with id {image_id} does not exist"}), 404
 
-        # elif category == "Entertainment":
-        #         return (get_blog_info (Entertainment, image_id))
+        elif category == "Entertainment":
+                data = Entertainment.query.filter_by(image_id=image_id).first()
+                if data:
+                       author = User.query.filter_by(id=data.author_id).first()
+                       return jsonify({
+                        "title": data.title,
+                        "slug": data.slug,
+                        "image_id": data.image_id,
+                        "body": data.body,
+                        "author": f"{author.first_name} {author.last_name}",
+                        "published on": data.published_on
+                        })
+                
+                return jsonify({"error": f"Image with id {image_id} does not exist"}), 404
         
         else:
             return jsonify({"error": "Invalid image_ID or category"}), 400
