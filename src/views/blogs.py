@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify, Response, json
 from src.models.database import User, News, Business, Sports, Entertainment
+from flask_jwt_extended import get_jwt_identity, jwt_required
+from ..models.database import db
 
 blogs = Blueprint("view", __name__, url_prefix="/")
 
@@ -80,73 +82,34 @@ def get_all_info(category, image_id):
 
 
 
-""" This is a function to query and return all 
-    the blogs associated with a certain category   """
-def get_all_blogs_with_category(model)-> list:
-        all_blogs = model.query.order_by(model.id.desc()).all()
-        serialized = []
-        for blog in all_blogs:
-                serialized.append(
-                        {
-                                "title": blog.title,
-                                "image_id": blog.image_id,
-                                "published_on": blog.published_on,
-                        }
-                )
-        
-        return serialized
-
-""" This is a function to query and return the 
-    brief news found in the home page         """
-def get_brief_home_news(model, page, per_page):
-        blogs = model.query.order_by(model.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
-        serialized = []
-        for blog in blogs:
-                serialized.append({
-                        "image_id": blog.image_id,
-                        "author": f"{blog.first_name} {blog.last_name}",
-                        "title": blog.title
-                })
-        
-        return serialized
-
-""" A function to get the all the data of an blog  """
-def get_blog_info (category, image_id):
-        data = category.query.filter_by(image_id=image_id).first()
-        print(data)
-        author = User.query.filter_by(id=data.id).first()
-        return jsonify({
-        "title": data.title,
-        "author": f"{author.first_name} {author.last_name}",
-        "published on": data.published_on,
-        "image_id": data.image_id
-})
-
-
-
-# """ A module to create  a blog """
-# @blogs.route("/createblog", methods=["POST"])
-# @login_required
-# def create_a_new_blog():
-        
-#         data = request.get_json()
-#         owner_id = current_user.id
-#         if validate_blog_data(data):
-#                 new_blog = Blogs(title=data["title"], category=data["category"], content=data["content"],owner_id=owner_id)
-#                 db.session.add(new_blog)
-#                 db.session.commit()
-#                 return jsonify({"success": "Blog created successfully"}), 200
+""" A module to create  a blog """
+@blogs.route("/createblog", methods=["POST"])
+@jwt_required()
+def create_a_new_blog():
+        if not request.content_type == "application/json":
+              return jsonify({"failed": "content_type must be application/json"}), 400
+        user_id = get_jwt_identity()
+        data = request.get_json()
+        if validate_blog_data(data):
+                if data["category"] == "News":
+                    add_new_blog_data(News, data, user_id)
+                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 200
+                
+                elif data["category"] == "Business":
+                    add_new_blog_data(Business, data, user_id)
+                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 200
+                
+                elif data["category"] == "Sports":
+                    add_new_blog_data(Sports, data, user_id)
+                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 200
+                
+                elif data["category"] == "Entertainment":
+                    add_new_blog_data(Entertainment, data, user_id)
+                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 200
 
         
-#         return jsonify({"failed": "All fields are required"}), 400
+        return jsonify({"failed": "All fields are required"}), 400
 
-
-# def validate_blog_data(user_input):
-        
-#         if "title" in user_input and "category" in user_input and "content" in user_input:
-#                 return True
-        
-#         return False
 
 # """ A module to get all the blogs written by the current user """
 # @blogs.route("/userblogs")
@@ -164,3 +127,68 @@ def get_blog_info (category, image_id):
 #                 })
           
 #         return serialized, 200
+
+
+""" This is a function to query and return the 
+    brief news found in the home page         """
+def get_brief_home_news(model, page, per_page):
+        blogs = model.query.order_by(model.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
+        serialized = []
+        for blog in blogs:
+                serialized.append({
+                        "image_id": blog.image_id,
+                        "author": f"{blog.first_name} {blog.last_name}",
+                        "title": blog.title
+                })
+        
+        return serialized
+
+
+""" This is a function to query and return all 
+    the blogs associated with a certain category   """
+def get_all_blogs_with_category(model)-> list:
+        all_blogs = model.query.order_by(model.id.desc()).all()
+        serialized = []
+        for blog in all_blogs:
+                serialized.append(
+                        {
+                                "title": blog.title,
+                                "image_id": blog.image_id,
+                                "published_on": blog.published_on,
+                        }
+                )
+        
+        return serialized
+
+""" A function to get the all the data of an blog  """
+def get_blog_info (category, image_id):
+        data = category.query.filter_by(image_id=image_id).first()
+        print(data)
+        author = User.query.filter_by(id=data.id).first()
+        return jsonify({
+        "title": data.title,
+        "author": f"{author.first_name} {author.last_name}",
+        "published on": data.published_on,
+        "image_id": data.image_id
+})
+
+""" A function to validate blogs info """
+def validate_blog_data(user_input):
+        
+        if "title" in user_input and "slug" in user_input and "body" \
+            in user_input and "image_id" in user_input \
+                  and "category" in user_input:
+                return True
+        
+        return False
+
+""" A function to add blogs according to its category """
+def add_new_blog_data(model, data, author_id):
+        new_blog = model(title=data["title"],
+                          slug=data["slug"], 
+                          image_id=data["image_id"],
+                          body=data["body"],
+                          author_id = author_id
+                          ) 
+        db.session.add(new_blog)
+        db.session.commit()
