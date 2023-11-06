@@ -12,11 +12,11 @@ class User(db.Model):
           last_name = db.Column(db.String(20), nullable=False)
           email = db.Column(db.String(30), unique=True)
           password = db.Column(db.String(30), nullable=False)
-          date_created = db.Column(db.DateTime, default=datetime.now())
+          date_created = db.Column(db.DateTime, default=datetime.now)
           news = db.relationship("News", backref="user", passive_deletes=True)
-          blogs = db.relationship("Business", backref="user", passive_deletes=True)
-          blogs = db.relationship("Sports", backref="user", passive_deletes=True)
-          blogs = db.relationship("Entertainment", backref="user", passive_deletes=True)
+          business = db.relationship("Business", backref="user", passive_deletes=True)
+          sports = db.relationship("Sports", backref="user", passive_deletes=True)
+          entertainment = db.relationship("Entertainment", backref="user", passive_deletes=True)
 
 
           def user_dict(self):
@@ -36,8 +36,8 @@ class News(db.Model):
         slug = db.Column(db.String(100), nullable=False)
         image_id = db.Column(db.String(100), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
-        date_created = db.Column(db.DateTime, default=datetime.now())
-        published_on = db.Column(db.DateTime, default = datetime.now(), onupdate=datetime.now())
+        date_created = db.Column(db.DateTime, default=datetime.now)
+        published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now)
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
         
 class Business(db.Model):
@@ -46,8 +46,8 @@ class Business(db.Model):
         slug = db.Column(db.String(100), nullable=False)
         image_id = db.Column(db.String(100), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
-        date_created = db.Column(db.DateTime, default=datetime.now())
-        published_on = db.Column(db.DateTime, default = datetime.now(), onupdate=datetime.now())
+        date_created = db.Column(db.DateTime, default=datetime.now)
+        published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now)
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 
 
@@ -57,8 +57,8 @@ class Sports(db.Model):
         slug = db.Column(db.String(100), nullable=False)
         image_id = db.Column(db.String(100), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
-        date_created = db.Column(db.DateTime, default=datetime.now())
-        published_on = db.Column(db.DateTime, default = datetime.now(), onupdate=datetime.now())
+        date_created = db.Column(db.DateTime, default=datetime.now)
+        published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now)
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 
      
@@ -68,8 +68,8 @@ class Entertainment(db.Model):
         slug = db.Column(db.String(100), nullable=False)
         image_id = db.Column(db.String(100), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
-        date_created = db.Column(db.DateTime, default=datetime.now())
-        published_on = db.Column(db.DateTime, default = datetime.now(), onupdate=datetime.now())
+        date_created = db.Column(db.DateTime, default=datetime.now)
+        published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now)
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 
 

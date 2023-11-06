@@ -111,22 +111,21 @@ def create_a_new_blog():
         return jsonify({"failed": "All fields are required"}), 400
 
 
-# """ A module to get all the blogs written by the current user """
-# @blogs.route("/userblogs")
-# @login_required
-# def create_get_all_user_blogs():
-#         print("Hello world")
-#         blogs = Blogs.query.filter_by(owner_id=current_user.id).order_by(Blogs.id.desc()).all()
-#         serialized = []
-#         for blog in blogs:
-#                 serialized.append({
-#                     "title": blog.title,
-#                     "category": blog.category,
-#                     "content": blog.content,
-#                     "date_created": blog.date_created
-#                 })
-          
-#         return serialized, 200
+""" A function to get all the blogs written by the current user """
+@blogs.route("/userblogs/<string:fullname>")
+def create_get_all_user_blogs(fullname):
+        first_name = fullname.split(" ")[0]
+        all_blogs = User.query.filter_by(first_name=first_name).first()
+        if all_blogs:
+               news_blogs = get_user_blogs_based_on_category(all_blogs.news)
+               business_blogs = get_user_blogs_based_on_category(all_blogs.business)
+               sports_blogs = get_user_blogs_based_on_category(all_blogs.sports)
+               entertainment_blogs = get_user_blogs_based_on_category(all_blogs.entertainment)
+               combined_blogs = news_blogs+business_blogs+sports_blogs+entertainment_blogs
+                
+               return combined_blogs, 200
+        else:
+            return {"error": f"No user with username {first_name}"}, 400
 
 
 """ This is a function to query and return the 
@@ -153,6 +152,7 @@ def get_all_blogs_with_category(model)-> list:
                 serialized.append(
                         {
                                 "title": blog.title,
+                                "slug": blog.slug,
                                 "image_id": blog.image_id,
                                 "published_on": blog.published_on,
                         }
@@ -192,3 +192,16 @@ def add_new_blog_data(model, data, author_id):
                           ) 
         db.session.add(new_blog)
         db.session.commit()
+
+""" A function to loop through a specific user blogs """
+def get_user_blogs_based_on_category(blogs):
+        serialized = []
+        for blog in blogs:
+                serialized.append({
+                        "image_id": blog.image_id,
+                        "title": blog.title,
+                        "slug": blog.slug,
+                        "published_on": blog.published_on
+                })
+
+        return serialized
