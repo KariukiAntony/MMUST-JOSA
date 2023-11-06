@@ -25,6 +25,8 @@ def register_user():
               elif not verify_password(request_data["password"]):
                   return jsonify({"Registration failed": "password must not be less tha 6 characters"}), 400
 
+              elif not handle_amount_of_people_to_register():
+                   return jsonify({"Registration failed": "You are not authorized to register with the system"}), 401
               
               hashed_password = handle_password_hashing(request_data["email"], request_data["password"])
               if hashed_password:
@@ -32,7 +34,7 @@ def register_user():
                               last_name=request_data["last_name"],
                               email=request_data["email"],
                               password=hashed_password)
-                    print(datetime.now())
+                    
                     db.session.add(new_user)
                     db.session.commit()
                     return make_response(jsonify({
@@ -107,6 +109,13 @@ def check_login_password(email, password):
             return existing_email
         
         return False
+    
+    return False
+
+def handle_amount_of_people_to_register():
+    users = User.query.all()
+    if len(users) < 1:
+        return True
     
     return False
 
