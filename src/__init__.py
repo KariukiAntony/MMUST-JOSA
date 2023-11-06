@@ -5,6 +5,7 @@ from os import path
 from src.auth.auth import auth
 from src.views.blogs import blogs
 from flask_login import LoginManager
+from flask_jwt_extended import JWTManager
 
 login_manager = LoginManager()
 
@@ -17,6 +18,7 @@ def create_app(config = config_dict["dev"]):
      migrate.init_app(app=app)
      login_manager.init_app(app=app)
      login_manager.login_view = "auth.login_blogger"
+     JWTManager(app)
 
      create_database(app=app)
 

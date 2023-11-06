@@ -1,11 +1,12 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, make_response
 from src.models.database import User, db
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
-
+from flask_jwt_extended  import create_access_token, create_refresh_token
+from datetime import datetime
 auth = Blueprint("auth", __name__, url_prefix="/api/auth")
 
-""" A module to get user registration data """
+""" An endpoint for user registration   """
 @auth.post("/register")
 def register_user():
           error_message = {"Registration failed": "make sure to double check your credentials"}
@@ -31,10 +32,13 @@ def register_user():
                               last_name=request_data["last_name"],
                               email=request_data["email"],
                               password=hashed_password)
-                    
+                    print(datetime.now())
                     db.session.add(new_user)
                     db.session.commit()
-                    return new_user.user_dict(), 201
+                    return make_response(jsonify({
+                        "success": "Author registered successfully",
+                        "user_info": new_user.user_dict()
+                    })) , 201
 
           return jsonify({"failed": "email already taken"}), 409
 
@@ -47,12 +51,16 @@ def login_blogger():
     user_login_info = request.get_json()
     
     if verify_user_login_credentials(user_login_info):
-        existing_email = check_login_password(user_login_info["email"], user_login_info["password"])
-        if existing_email:
-            user = User.query.filter_by(email=user_login_info["email"]).first()
-            # login_user(user, remember=True)
+        user = check_login_password(user_login_info["email"], user_login_info["password"])
+        if user:
+            access_token = create_access_token(identity=user.id)
+            refresh_token = create_refresh_token(identity=user.id)
 
-            return jsonify({"success": "login successful"}), 200
+            return jsonify({"success":{
+                "User": f"{user.first_name} {user.last_name}",
+                "access_token": access_token,
+                "refresh_token": refresh_token
+            }}), 200
 
         return jsonify({"error": "Invalid email or password"}), 401
 

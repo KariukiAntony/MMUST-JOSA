@@ -111,7 +111,6 @@ def get_brief_home_news(model, page, per_page):
         return serialized
 
 """ A function to get the all the data of an blog  """
-
 def get_blog_info (category, image_id):
         data = category.query.filter_by(image_id=image_id).first()
         print(data)
