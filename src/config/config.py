@@ -2,10 +2,10 @@ import os
 from decouple import config
 from datetime import timedelta
 class Config:
-     SECRET_KEY = "secret_key"
+     SECRET_KEY = config("SECRET_KEY")
 
 class DevConfig(Config):
-     SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"
+     SQLALCHEMY_DATABASE_URI = config("DATABASE_URI")
      SQLALCHEMY_TRACK_MODIFICATION = False
      DEBUG = True
      JWT_SECRET_KEY = config("JWT_SECRET_KEY") 
