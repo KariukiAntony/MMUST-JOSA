@@ -6,7 +6,7 @@ from src.auth.auth import auth
 from src.views.blogs import blogs
 from flask_jwt_extended import JWTManager
 
-""" A module for creating an application """
+""" A function for creating an application """
 def create_app(config = config_dict["dev"]):
      
      app = Flask(__name__)
