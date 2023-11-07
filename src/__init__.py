@@ -31,7 +31,7 @@ def create_app(config = config_dict["dev"]):
      
      @app.route("/")
      def index():
-         return jsonify({"Hello there":" Welcome to best blogging web app" })
+         return jsonify({"Hello there":" Welcome to JOWA MMUST blogging web app" })
      
      return app
 
