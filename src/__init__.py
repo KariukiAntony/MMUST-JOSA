@@ -5,6 +5,7 @@ from os import path
 from src.auth.auth import auth
 from src.views.blogs import blogs
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 
 """ A function for creating an application """
 def create_app(config = config_dict["dev"]):
@@ -14,6 +15,10 @@ def create_app(config = config_dict["dev"]):
      db.init_app(app=app)
      migrate.init_app(app=app)
      JWTManager(app)
+     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+    #  CORS(app, resources={r"/*": {"origins": "*",
+    #                              "methods": ["GET", "POST", "PATCH", "DELETE"],
+    #                              "supports_credentials": True}})
 
      create_database(app=app)
 

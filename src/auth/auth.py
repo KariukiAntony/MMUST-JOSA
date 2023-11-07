@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, make_response
+from flask_cors import cross_origin
 from src.models.database import User, db
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
@@ -8,6 +9,7 @@ auth = Blueprint("auth", __name__, url_prefix="/api/auth")
 
 """ An endpoint for user registration   """
 @auth.post("/register")
+@cross_origin() 
 def register_user():
           error_message = {"Registration failed": "make sure to double check your credentials"}
 
@@ -114,7 +116,7 @@ def check_login_password(email, password):
 
 def handle_amount_of_people_to_register():
     users = User.query.all()
-    if len(users) < 2:
+    if len(users) < 10:
         return True
     
     return False
