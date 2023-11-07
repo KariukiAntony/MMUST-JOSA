@@ -55,7 +55,7 @@ def get_all_entertainment_blogs():
         all_entertainment = get_all_blogs_with_category(model=Entertainment)
 
         return all_entertainment, 200
-
+# best code 
 """  An endpoint to get the data associated with and image   """
 @blogs.route('/blogs/<string:category>/<string:image_id>')
 def get_all_info(category, image_id): 
