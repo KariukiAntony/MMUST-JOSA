@@ -184,6 +184,7 @@ def get_all_blogs_with_category(model)-> list:
 
 """ A function to get the all the data of an blog  """
 def get_blog_info (category, image_id):
+        print(category, image_id)
         data = category.query.filter_by(image_id=image_id).first()
         if data:
            author = User.query.filter_by(id=data.author_id).first()
@@ -196,8 +197,8 @@ def get_blog_info (category, image_id):
                 "published on": data.published_on
                  }
                  )
-
-        return False
+        else:
+            return False
 
 """ A function to validate blogs info """
 def validate_blog_data(user_input):
