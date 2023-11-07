@@ -114,7 +114,7 @@ def check_login_password(email, password):
 
 def handle_amount_of_people_to_register():
     users = User.query.all()
-    if len(users) < 1:
+    if len(users) < 2:
         return True
     
     return False

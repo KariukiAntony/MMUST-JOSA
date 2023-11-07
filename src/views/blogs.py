@@ -185,17 +185,19 @@ def get_all_blogs_with_category(model)-> list:
 """ A function to get the all the data of an blog  """
 def get_blog_info (category, image_id):
         data = category.query.filter_by(image_id=image_id).first()
-        author = User.query.filter_by(id=data.author_id).first()
-        return jsonify(
-               {
+        if data:
+           author = User.query.filter_by(id=data.author_id).first()
+           return jsonify({
                 "title": data.title,
                 "slug": data.slug,
                 "image_id": data.image_id,
                 "body": data.body,
                 "author": f"{author.first_name} {author.last_name}",
                 "published on": data.published_on
-                }
-                )
+                 }
+                 )
+
+        return False
 
 """ A function to validate blogs info """
 def validate_blog_data(user_input):
