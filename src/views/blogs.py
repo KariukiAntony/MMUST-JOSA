@@ -59,39 +59,36 @@ def get_all_entertainment_blogs():
 """  An endpoint to get the data associated with and image   """
 @blogs.route('/blogs/<string:category>/<string:image_id>')
 def get_all_info(category, image_id): 
-        error_mesage = {"error": "The category deos not exist"}          
+        error_message = {"error": f"{category} Image with id {image_id} does not exist"}        
         if category == "News":
-                data = get_blog_info (category=News, image_id=image_id)
-                if data:
-                       return data, 200
+                blog_data = get_blog_info(category=News, image_id=image_id)
+                if blog_data:
+                       return blog_data, 200
                 
-                return jsonify({"error": f"Image with id {image_id} does not exist"}), 404
+                return jsonify(error_message), 404
         
         elif category == "Business":
-                data = get_blog_info (category=Business, image_id=image_id)
-                if data:
-                       return data, 200
+                blog_data = get_blog_info(category=Business, image_id=image_id)
+                if blog_data:
+                       return blog_data, 200
                 
-                return jsonify({"error": f"Image with id {image_id} does not exist"}), 404
+                return jsonify(error_message), 404
         
         elif category == "Sports":
-                data = get_blog_info (category=News, image_id=image_id)
-                if data:
-                       return data, 200
+                blog_data = get_blog_info(category=Sports, image_id=image_id)
+                if blog_data:
+                        return blog_data, 200
                 
-                return jsonify({"error": f"Image with id {image_id} does not exist"}), 404
-
+                return jsonify(error_message), 404
+                
         elif category == "Entertainment":
-                data = get_blog_info (category=News, image_id=image_id)
-                if data:
-                       return data, 200
+                blog_data = get_blog_info(category=Entertainment, image_id=image_id)
+                if blog_data:
+                        return blog_data, 200
                 
-                return jsonify({"error": f"Image with id {image_id} does not exist"}), 404
-        
-        else:
-            return jsonify({"error": "Invalid image_ID or category"}), 400
-
-
+                return jsonify(error_message), 404
+                
+        return jsonify({"error": "Invalid category"}), 400
 
 """ A module to create  a blog """
 @blogs.route("/createblog", methods=["POST"])
@@ -184,7 +181,6 @@ def get_all_blogs_with_category(model)-> list:
 
 """ A function to get the all the data of an blog  """
 def get_blog_info (category, image_id):
-        print(category, image_id)
         data = category.query.filter_by(image_id=image_id).first()
         if data:
            author = User.query.filter_by(id=data.author_id).first()
