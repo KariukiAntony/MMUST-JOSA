@@ -22,8 +22,8 @@ def register_user():
               elif not verify_user_email(request_data["email"]):
                  return jsonify({"Registration failed": "Email is badly formated"}), 400
         
-              elif not verify_password(request_data["password"]):
-                  return jsonify({"Registration failed": "password must not be less tha 6 characters"}), 400
+              elif not verify_password(request_data["password"], request_data["confirm"]):
+                  return jsonify({"Registration failed": "passwords do not match. Try again"}), 400
 
               elif not handle_amount_of_people_to_register():
                    return jsonify({"Registration failed": "You are not authorized to register with the system"}), 401
@@ -72,7 +72,7 @@ def login_blogger():
 
 def verify_user_registration_details(new_user):
     if "first_name" in new_user and "last_name" in new_user and "email" in new_user \
-    and "password" in new_user:
+    and "password" in new_user and "confirm" in new_user:
         return True
     
     return False
@@ -84,8 +84,8 @@ def verify_user_email(email):
     return False
         
 
-def verify_password(password):
-    return len(password) > 6
+def verify_password(password1, password2):
+    return len(password1) > 6 and password1 == password2
 
 
 def handle_password_hashing(email, password):
