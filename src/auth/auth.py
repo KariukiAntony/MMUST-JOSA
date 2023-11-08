@@ -49,6 +49,7 @@ def register_user():
 
 """ An endpoint to login user """
 @auth.post("/login")
+@cross_origin() 
 def login_blogger():
     if not request.content_type == "application/json":
             return jsonify({"Registration failed": "content_type must be appliaction/json"}), 401

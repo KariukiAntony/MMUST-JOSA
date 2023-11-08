@@ -19,8 +19,13 @@ def create_app(config = config_dict["dev"]):
     #  CORS(app, resources={r"/*": {"origins": "*",
     #                              "methods": ["GET", "POST", "PATCH", "DELETE"],
     #                              "supports_credentials": True}})
-
+    
      create_database(app=app)
+
+     @app.after_request
+     def add_security_header(resp):
+         resp.headers["Content-Security-Policy"] = "default-src \'self\'"
+         return resp
 
      @app.errorhandler(404)
      def handle_not_found(e):

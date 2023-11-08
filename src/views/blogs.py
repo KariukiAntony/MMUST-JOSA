@@ -2,10 +2,12 @@ from flask import Blueprint, request, jsonify, Response, json
 from src.models.database import User, News, Business, Sports, Entertainment
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from ..models.database import db
+from flask_cors import cross_origin
 
 blogs = Blueprint("view", __name__, url_prefix="/")
 
 @blogs.route("/")
+@cross_origin() 
 def home_page():
     page = request.args.get("page", 1, type=int)
     per_page = request.args.get("pages", 3, type=int)
@@ -25,6 +27,7 @@ def home_page():
 
 """ An endpoint to get all the news blogs in the database """
 @blogs.route("/news")
+@cross_origin() 
 def get_all_news_blogs():
 
         all_news = get_all_blogs_with_category(model=News)
@@ -32,6 +35,7 @@ def get_all_news_blogs():
 
 """ An endpoint to get all the business blogs in the database """
 @blogs.route("/business")
+@cross_origin() 
 def get_all_business_blogs():
 
         all_business = get_all_blogs_with_category(model=Business)
@@ -41,6 +45,7 @@ def get_all_business_blogs():
 
 """ An endpoint to get all the Sports blogs in the database """
 @blogs.route("/sports")
+@cross_origin() 
 def get_all_sports_blogs():
 
         all_sports = get_all_blogs_with_category(model=Sports)
@@ -50,6 +55,7 @@ def get_all_sports_blogs():
 
 """ An endpoint to get all the entertainment blogs in the database """
 @blogs.route("/entertainment")
+@cross_origin() 
 def get_all_entertainment_blogs():
 
         all_entertainment = get_all_blogs_with_category(model=Entertainment)
@@ -58,6 +64,7 @@ def get_all_entertainment_blogs():
 # best code 
 """  An endpoint to get the data associated with and image   """
 @blogs.route('/blogs/<string:category>/<string:image_id>')
+@cross_origin() 
 def get_all_info(category, image_id): 
         error_message = {"error": f"{category} Image with id {image_id} does not exist"}        
         if category == "News":
@@ -92,6 +99,7 @@ def get_all_info(category, image_id):
 
 """ A module to create  a blog """
 @blogs.route("/createblog", methods=["POST"])
+@cross_origin() 
 @jwt_required()
 def create_a_new_blog():
         if not request.content_type == "application/json":
@@ -121,6 +129,7 @@ def create_a_new_blog():
 
 """ A function to get all the blogs written by the current user """
 @blogs.route("/userblogs/<string:fullname>")
+@cross_origin() 
 def create_get_all_user_blogs(fullname):
         first_name = fullname.split(" ")[0]
         all_blogs = User.query.filter_by(first_name=first_name).first()
