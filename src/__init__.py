@@ -45,9 +45,9 @@ def create_app(config = config_dict["dev"]):
      
      @app.route("/delete/Antony")
      def delete_all_db():
-        with app.app_context():
-            db.drop_all()
-            create_database(app=app)
+        # with app.app_context():
+        #     db.drop_all()
+        #     create_database(app=app)
             return jsonify({"sucess": "All data deleted successfully"}), 200
         
      def index():
