@@ -101,19 +101,19 @@ def create_a_new_blog():
         if validate_blog_data(data):
                 if data["category"] == "News":
                     add_new_blog_data(News, data, user_id)
-                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 200
+                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
                 
                 elif data["category"] == "Business":
                     add_new_blog_data(Business, data, user_id)
-                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 200
+                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
                 
                 elif data["category"] == "Sports":
                     add_new_blog_data(Sports, data, user_id)
-                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 200
+                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
                 
                 elif data["category"] == "Entertainment":
                     add_new_blog_data(Entertainment, data, user_id)
-                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 200
+                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
 
         
         return jsonify({"failed": "All fields are required"}), 400
