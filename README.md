@@ -11,7 +11,7 @@ This project contains code for a blogging web app which enables users to easily 
 ### Installations
 You can use the git clone  command as follows:
 ```sh 
-user@username:~$ git clone https://github.com/parlgy/student-management.git  
+user@username:~$ git clone https://github.com/BudhaBudha/Mmust-Jowa.git 
 user@username:~$ cd  student-management
 user@username:~$ python -m venv my_venv # create a virtual env to manage your dependecies
 user@username:~$ source my_venv/bin/activate  # for linux users
