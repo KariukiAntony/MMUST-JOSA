@@ -42,13 +42,6 @@ def create_app(config = config_dict["dev"]):
      @app.route("/")
      def index():
          return jsonify({"Hello there":" Welcome to JOWA MMUST blogging web app" })
-     
-    #  @app.route("/delete/Antony")
-    #  def delete_all_db():
-    #     # with app.app_context():
-    #     #     db.drop_all()
-    #     #     create_database(app=app)
-    #         return jsonify({"sucess": "All data deleted successfully"}), 200
         
      def index():
          return jsonify({"Hello there":" Welcome to JOWA MMUST blogging web app" })
