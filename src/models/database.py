@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_migrate import Migrate
+import pytz
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -14,12 +15,11 @@ class User(db.Model):
           last_name = db.Column(db.String(20), nullable=False)
           email = db.Column(db.String(30), unique=True)
           password = db.Column(db.String(30), nullable=False)
-          date_created = db.Column(db.DateTime(timezone=True), default=datetime.now)
+          date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
           news = db.relationship("News", backref="user", passive_deletes=True)
           business = db.relationship("Business", backref="user", passive_deletes=True)
           sports = db.relationship("Sports", backref="user", passive_deletes=True)
           entertainment = db.relationship("Entertainment", backref="user", passive_deletes=True)
-          comment=db.relationship("Comment",backref='user',passive_deletes=True)
 
           def user_dict(self):
                
@@ -41,6 +41,14 @@ class News(db.Model):
         date_created = db.Column(db.DateTime, default=datetime.now)
         published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now)
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+        comments = db.relationship("NewsComment", backref='news', passive_deletes=True)
+
+class NewsComments(db.Model):
+       id = db.Column(db.Integer, primary_key=True, index=True)
+       content = db.Column(db.Text, nullable=False)
+       date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
+       is_anonymous = db.Column(db.Boolean, default=True)
+       news_id = db.Column(db.Integer, db.ForeignKey("news.id", ondelete="CASCADE"), nullable=False)
         
 class Business(db.Model):
         id = db.Column(db.Integer, primary_key=True, index=True)
@@ -51,6 +59,14 @@ class Business(db.Model):
         date_created = db.Column(db.DateTime, default=datetime.now)
         published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now)
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+        comment=db.relationship("BusinessComments", backref='business', passive_deletes=True)
+
+class BusinessComments(db.Model):
+       id = db.Column(db.Integer, primary_key=True, index=True)
+       content = db.Column(db.Text, nullable=False)
+       date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
+       is_anonymous = db.Column(db.Boolean, default=True)
+       business_id = db.Column(db.Integer, db.ForeignKey("business.id", ondelete="CASCADE"), nullable=False)
 
 
 class Sports(db.Model):
@@ -62,6 +78,14 @@ class Sports(db.Model):
         date_created = db.Column(db.DateTime, default=datetime.now)
         published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now)
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+        comment=db.relationship("SportsComments", backref='sports', passive_deletes=True)
+
+class SportsComments(db.Model):
+       id = db.Column(db.Integer, primary_key=True, index=True)
+       content = db.Column(db.Text, nullable=False)
+       date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
+       is_anonymous = db.Column(db.Boolean, default=True)
+       business_id = db.Column(db.Integer, db.ForeignKey("sports.id", ondelete="CASCADE"), nullable=False)
 
      
 class Entertainment(db.Model):
@@ -73,15 +97,12 @@ class Entertainment(db.Model):
         date_created = db.Column(db.DateTime, default=datetime.now)
         published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now)
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+        comment=db.relationship("EntertainmentComments",backref='entertainment',passive_deletes=True)
 
-
-class Comment(db.Model):
-       id = db.Column(db.Integer, primary_key=True)
+class EntertainmentComments(db.Model):
+       id = db.Column(db.Integer, primary_key=True, index=True)
        content = db.Column(db.Text, nullable=False)
-       timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-       parent_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
+       date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
        is_anonymous = db.Column(db.Boolean, default=True)
-       author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+       business_id = db.Column(db.Integer, db.ForeignKey("entertainment.id", ondelete="CASCADE"), nullable=False)
 
-       def __repr__(self):
-         return f'<Comment {self.id}>'
