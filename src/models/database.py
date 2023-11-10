@@ -39,7 +39,7 @@ class News(db.Model):
         image_id = db.Column(db.String(100), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
         date_created = db.Column(db.DateTime, default=datetime.now)
-        published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now)
+        published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now(pytz.utc))
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
         comments = db.relationship("NewsComment", backref='news', passive_deletes=True)
 
@@ -56,8 +56,8 @@ class Business(db.Model):
         slug = db.Column(db.String(100), nullable=False)
         image_id = db.Column(db.String(100), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
-        date_created = db.Column(db.DateTime, default=datetime.now)
-        published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now)
+        date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
+        published_on = db.Column(db.DateTime, default=datetime.now(pytz.utc), onupdate=datetime.now(pytz.utc))
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
         comment=db.relationship("BusinessComments", backref='business', passive_deletes=True)
 
@@ -75,8 +75,8 @@ class Sports(db.Model):
         slug = db.Column(db.String(100), nullable=False)
         image_id = db.Column(db.String(100), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
-        date_created = db.Column(db.DateTime, default=datetime.now)
-        published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now)
+        date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
+        published_on = db.Column(db.DateTime, default = datetime.now(pytz.utc), onupdate=datetime.now(pytz.utc))
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
         comment=db.relationship("SportsComments", backref='sports', passive_deletes=True)
 
@@ -94,8 +94,8 @@ class Entertainment(db.Model):
         slug = db.Column(db.String(100), nullable=False)
         image_id = db.Column(db.String(100), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
-        date_created = db.Column(db.DateTime, default=datetime.now)
-        published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now)
+        date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
+        published_on = db.Column(db.DateTime, default = datetime.now(pytz.utc), onupdate=datetime.now(pytz.utc))
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
         comment=db.relationship("EntertainmentComments",backref='entertainment',passive_deletes=True)
 
