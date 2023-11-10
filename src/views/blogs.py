@@ -165,25 +165,25 @@ def create_comment(category, image_id):
               return jsonify({"Error": "content required"}), 400
         
         elif category == "News":
-               if create_comment(category=NewsComments, image_id=image_id, data=data):
+               if create_comment(category=NewsComments,category1=News, image_id=image_id, data=data):
                       return jsonify({"success": success_message}), 201
                
                return jsonify({"error": error_message}), 404
         
         elif category == "Business":
-               if create_comment(category=BusinessComments, image_id=image_id, data=data):
+               if create_comment(category=BusinessComments, category1=Business, image_id=image_id, data=data):
                       return jsonify({"success": success_message}), 201
                
                return jsonify({"error": error_message}), 404
         
         elif category == "Sports":
-               if create_comment(category=SportsComments, image_id=image_id, data=data):
+               if create_comment(category=SportsComments,category1=Sports, image_id=image_id, data=data):
                       return jsonify({"success": success_message}), 201
                
                return jsonify({"error": error_message}), 404
         
         elif category == "Entertainment":
-               if create_comment(category=EntertainmentComments, image_id=image_id, data=data):
+               if create_comment(category=EntertainmentComments,category1=Entertainment, image_id=image_id, data=data):
                       return jsonify({"success": success_message}), 201
                
                return jsonify({"error": error_message}), 404
@@ -203,7 +203,7 @@ def get_brief_home_news(model, page, per_page):
                         "author": get_the_user_based_on_author_id(blog.author_id),
                         "title": blog.title,
                         "slug": blog.slug,
-                        "published_on": blog.published_on
+                        "published_on": get_good_time(blog.published_on)
                 })
         
         return serialized
@@ -286,11 +286,12 @@ def get_user_blogs_based_on_category(blogs):
 
 
 """ A function to create a comment"""
-def create_comment (category, image_id, data):
-
-        blog = category.query.filter_by(image_id=image_id).first()
+def create_comment (category, category1, image_id, data):
+        content = data["content"]
+        is_anonymous = data.get("is_anonymous", True)
+        blog = category1.query.filter_by(image_id=image_id).first()
         if blog:
-           new_comment = category(content=data["content"], is_anonymous = data["is_anonymous", True], blog_id= blog.id)
+           new_comment = category(content=content, is_anonymous = is_anonymous , blog_id= blog.id)
            db.session.add(new_comment)
            db.session.commit()
            return True
