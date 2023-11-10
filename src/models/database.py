@@ -48,7 +48,7 @@ class NewsComments(db.Model):
        content = db.Column(db.Text, nullable=False)
        date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
        is_anonymous = db.Column(db.Boolean, default=True)
-       news_id = db.Column(db.Integer, db.ForeignKey("news.id", ondelete="CASCADE"), nullable=False)
+       blog_id = db.Column(db.Integer, db.ForeignKey("news.id", ondelete="CASCADE"), nullable=False)
         
 class Business(db.Model):
         id = db.Column(db.Integer, primary_key=True, index=True)
@@ -66,7 +66,7 @@ class BusinessComments(db.Model):
        content = db.Column(db.Text, nullable=False)
        date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
        is_anonymous = db.Column(db.Boolean, default=True)
-       business_id = db.Column(db.Integer, db.ForeignKey("business.id", ondelete="CASCADE"), nullable=False)
+       blog_id = db.Column(db.Integer, db.ForeignKey("business.id", ondelete="CASCADE"), nullable=False)
 
 
 class Sports(db.Model):
@@ -85,7 +85,7 @@ class SportsComments(db.Model):
        content = db.Column(db.Text, nullable=False)
        date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
        is_anonymous = db.Column(db.Boolean, default=True)
-       business_id = db.Column(db.Integer, db.ForeignKey("sports.id", ondelete="CASCADE"), nullable=False)
+       blog_id = db.Column(db.Integer, db.ForeignKey("sports.id", ondelete="CASCADE"), nullable=False)
 
      
 class Entertainment(db.Model):
@@ -104,5 +104,5 @@ class EntertainmentComments(db.Model):
        content = db.Column(db.Text, nullable=False)
        date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
        is_anonymous = db.Column(db.Boolean, default=True)
-       business_id = db.Column(db.Integer, db.ForeignKey("entertainment.id", ondelete="CASCADE"), nullable=False)
+       blog_id = db.Column(db.Integer, db.ForeignKey("entertainment.id", ondelete="CASCADE"), nullable=False)
 

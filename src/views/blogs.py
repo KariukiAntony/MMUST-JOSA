@@ -62,7 +62,7 @@ def get_all_entertainment_blogs():
 
         return all_entertainment, 200
 # best code 
-"""  An endpoint to get the data associated with and image   """
+"""  An endpoint to get the data associated with and image_id presented  """
 @blogs.route('/blogs/<string:category>/<string:image_id>')
 @cross_origin() 
 def get_all_info(category, image_id): 
@@ -97,7 +97,7 @@ def get_all_info(category, image_id):
                 
         return jsonify({"error": "Invalid category"}), 400
 
-""" A module to create  a blog """
+""" An endpoint to create  a blog """
 @blogs.route("/createblog", methods=["POST"])
 @cross_origin() 
 @jwt_required()
@@ -127,10 +127,10 @@ def create_a_new_blog():
         return jsonify({"failed": "All fields are required"}), 400
 
 
-""" A function to get all the blogs written by the current user """
+""" An endpoint to get all the blogs written by the current user """
 @blogs.route("/userblogs/<string:fullname>")
 @cross_origin() 
-def create_get_all_user_blogs(fullname):
+def get_all_user_blogs(fullname):
         first_name = fullname.split(" ")[0]
         all_blogs = User.query.filter_by(first_name=first_name).first()
         if all_blogs:
@@ -145,6 +145,20 @@ def create_get_all_user_blogs(fullname):
 
         else:
             return {"error": f"No user with username {first_name}"}, 400
+
+
+""" An endpoint to create comment associated with a blog """
+@blogs.route('/blogs/comment/<string:category>/<string:image_id>', methods=['POST'])
+@cross_origin() 
+def create_comment(category, image_id):
+       data = request.get_json()
+       content=data.get('content')
+       is_anonymous=data.get('is_anonymous', True)
+       comment=Comment(content=content,parent_id=parent_id,is_anonymous=is_anonymous)
+       db.session.add(comment)
+       db.session.commit()
+
+       return jsonify(message='Comment created successfuly'),201
 
 
 """ This is a function to query and return the 
@@ -239,32 +253,17 @@ def get_user_blogs_based_on_category(blogs):
 
         return serialized
 
-@blogs.route('/createcomments', methods=['POST'])
-@cross_origin() 
-def create_comment():
-       data = request.get_json()
-       content=data.get('content')
-       parent_id=data.get('parent_id')
-       is_anonymous=data.get('is_anonymous',True)
-       comment=Comment(content=content,parent_id=parent_id,is_anonymous=is_anonymous)
-       db.session.add(comment)
-       db.session.commit()
 
-       return jsonify(message='Comment created successfuly'),201
+""" A function to get the all the data of an blog  """
+def get_blog_info (category, image_id, data):
 
-@blogs.route('/comments', methods=['GET'])
-@cross_origin()
-def get_comments():
-    comments = Comment.query.filter_by(parent_id=None).all()
-    comment_list = []
+        blog = category.query.filter_by(image_id=image_id).first()
+        if blog:
+           new_comment = category(content=data["content"], is_anonymous = data["is_anonymous", True], blog_id= blog.id)
+           db.session.add(new_comment)
+           db.session.commit()
+           return True
 
-    for comment in comments:
-        comment_data = {
-            'id': comment.id,
-            'content': comment.content,
-            'timestamp': comment.timestamp,
-            'is_anonymous': comment.is_anonymous
-        }
-        comment_list.append(comment_data)
+        return False
 
-    return jsonify(comments=comment_list)
+
