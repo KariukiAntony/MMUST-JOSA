@@ -1,8 +1,15 @@
 from flask import Blueprint, request, jsonify, Response, json
-from src.models.database import User, News, Business, Sports, Entertainment,Comment
+from src.models.database import( User, News, Business, Sports, Entertainment,NewsComments,
+BusinessComments, SportsComments, EntertainmentComments)
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from ..models.database import db
 from flask_cors import cross_origin
+
+import pytz
+local_timezone = pytz.timezone('Africa/Nairobi')  # Replace 'Africa/Nairobi' with your actual timezone
+def get_good_time(db_time):
+       local_date = db_time.astimezone(local_timezone)                                                                                                                                                                                                                                                                    
+       return local_date
 
 blogs = Blueprint("view", __name__, url_prefix="/")
 
@@ -158,25 +165,25 @@ def create_comment(category, image_id):
               return jsonify({"Error": "content required"}), 400
         
         elif category == "News":
-               if create_comment(category=News, image_id=image_id, data=data):
+               if create_comment(category=NewsComments, image_id=image_id, data=data):
                       return jsonify({"success": success_message}), 201
                
                return jsonify({"error": error_message}), 404
         
         elif category == "Business":
-               if create_comment(category=Business, image_id=image_id, data=data):
+               if create_comment(category=BusinessComments, image_id=image_id, data=data):
                       return jsonify({"success": success_message}), 201
                
                return jsonify({"error": error_message}), 404
         
         elif category == "Sports":
-               if create_comment(category=Sports, image_id=image_id, data=data):
+               if create_comment(category=SportsComments, image_id=image_id, data=data):
                       return jsonify({"success": success_message}), 201
                
                return jsonify({"error": error_message}), 404
         
         elif category == "Entertainment":
-               if create_comment(category=Entertainment, image_id=image_id, data=data):
+               if create_comment(category=EntertainmentComments, image_id=image_id, data=data):
                       return jsonify({"success": success_message}), 201
                
                return jsonify({"error": error_message}), 404

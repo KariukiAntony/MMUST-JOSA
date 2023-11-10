@@ -6,16 +6,13 @@ import pytz
 db = SQLAlchemy()
 migrate = Migrate()
 
-now = datetime.now()
-formatted = now.strftime("%Y-%m-%d %H:%M:%S")
-
 class User(db.Model):
           id = db.Column(db.Integer, primary_key = True, index=True)
           first_name = db.Column(db.String(20), nullable=False)
           last_name = db.Column(db.String(20), nullable=False)
           email = db.Column(db.String(30), unique=True)
           password = db.Column(db.String(30), nullable=False)
-          date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
+          date_created = db.Column(db.DateTime, default=datetime.now(tz=pytz.UTC))
           news = db.relationship("News", backref="user", passive_deletes=True)
           business = db.relationship("Business", backref="user", passive_deletes=True)
           sports = db.relationship("Sports", backref="user", passive_deletes=True)
@@ -39,14 +36,14 @@ class News(db.Model):
         image_id = db.Column(db.String(100), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
         date_created = db.Column(db.DateTime, default=datetime.now)
-        published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now(pytz.utc))
+        published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now(tz=pytz.UTC))
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
-        comments = db.relationship("NewsComment", backref='news', passive_deletes=True)
+        comments = db.relationship("NewsComments", backref='news', passive_deletes=True)
 
 class NewsComments(db.Model):
        id = db.Column(db.Integer, primary_key=True, index=True)
        content = db.Column(db.Text, nullable=False)
-       date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
+       date_created = db.Column(db.DateTime, default=datetime.now(tz=pytz.UTC))
        is_anonymous = db.Column(db.Boolean, default=True)
        blog_id = db.Column(db.Integer, db.ForeignKey("news.id", ondelete="CASCADE"), nullable=False)
         
@@ -56,15 +53,15 @@ class Business(db.Model):
         slug = db.Column(db.String(100), nullable=False)
         image_id = db.Column(db.String(100), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
-        date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
-        published_on = db.Column(db.DateTime, default=datetime.now(pytz.utc), onupdate=datetime.now(pytz.utc))
+        date_created = db.Column(db.DateTime, default=datetime.now(pytz.UTC))
+        published_on = db.Column(db.DateTime, default=datetime.now(pytz.utc), onupdate=datetime.now(pytz.UTC))
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
         comment=db.relationship("BusinessComments", backref='business', passive_deletes=True)
 
 class BusinessComments(db.Model):
        id = db.Column(db.Integer, primary_key=True, index=True)
        content = db.Column(db.Text, nullable=False)
-       date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
+       date_created = db.Column(db.DateTime, default=datetime.now(pytz.UTC))
        is_anonymous = db.Column(db.Boolean, default=True)
        blog_id = db.Column(db.Integer, db.ForeignKey("business.id", ondelete="CASCADE"), nullable=False)
 
@@ -75,8 +72,8 @@ class Sports(db.Model):
         slug = db.Column(db.String(100), nullable=False)
         image_id = db.Column(db.String(100), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
-        date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
-        published_on = db.Column(db.DateTime, default = datetime.now(pytz.utc), onupdate=datetime.now(pytz.utc))
+        date_created = db.Column(db.DateTime, default=datetime.now(pytz.UTC))
+        published_on = db.Column(db.DateTime, default = datetime.now(pytz.UTC), onupdate=datetime.now(pytz.UTC))
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
         comment=db.relationship("SportsComments", backref='sports', passive_deletes=True)
 
@@ -94,15 +91,15 @@ class Entertainment(db.Model):
         slug = db.Column(db.String(100), nullable=False)
         image_id = db.Column(db.String(100), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
-        date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
-        published_on = db.Column(db.DateTime, default = datetime.now(pytz.utc), onupdate=datetime.now(pytz.utc))
+        date_created = db.Column(db.DateTime, default=datetime.now(pytz.UTC))
+        published_on = db.Column(db.DateTime, default = datetime.now(pytz.UTC), onupdate=datetime.now(pytz.UTC))
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
         comment=db.relationship("EntertainmentComments",backref='entertainment',passive_deletes=True)
 
 class EntertainmentComments(db.Model):
        id = db.Column(db.Integer, primary_key=True, index=True)
        content = db.Column(db.Text, nullable=False)
-       date_created = db.Column(db.DateTime, default=datetime.now(pytz.utc))
+       date_created = db.Column(db.DateTime, default=datetime.now(pytz.UTC))
        is_anonymous = db.Column(db.Boolean, default=True)
        blog_id = db.Column(db.Integer, db.ForeignKey("entertainment.id", ondelete="CASCADE"), nullable=False)
 
