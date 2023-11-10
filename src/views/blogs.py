@@ -151,14 +151,38 @@ def get_all_user_blogs(fullname):
 @blogs.route('/blogs/comment/<string:category>/<string:image_id>', methods=['POST'])
 @cross_origin() 
 def create_comment(category, image_id):
-       data = request.get_json()
-       content=data.get('content')
-       is_anonymous=data.get('is_anonymous', True)
-       comment=Comment(content=content,parent_id=parent_id,is_anonymous=is_anonymous)
-       db.session.add(comment)
-       db.session.commit()
-
-       return jsonify(message='Comment created successfuly'),201
+        success_message = f"new {category} comment added successfully"
+        error_message = f"Failed to create a new comment. check the image id provided"
+        data = request.get_json()
+        if not "content" in data:
+              return jsonify({"Error": "content required"}), 400
+        
+        elif category == "News":
+               if create_comment(category=News, image_id=image_id, data=data):
+                      return jsonify({"success": success_message}), 201
+               
+               return jsonify({"error": error_message}), 404
+        
+        elif category == "Business":
+               if create_comment(category=Business, image_id=image_id, data=data):
+                      return jsonify({"success": success_message}), 201
+               
+               return jsonify({"error": error_message}), 404
+        
+        elif category == "Sports":
+               if create_comment(category=Sports, image_id=image_id, data=data):
+                      return jsonify({"success": success_message}), 201
+               
+               return jsonify({"error": error_message}), 404
+        
+        elif category == "Entertainment":
+               if create_comment(category=Entertainment, image_id=image_id, data=data):
+                      return jsonify({"success": success_message}), 201
+               
+               return jsonify({"error": error_message}), 404
+        
+        else:
+               return jsonify({"error": "Invalid category"}), 400
 
 
 """ This is a function to query and return the 
@@ -254,8 +278,8 @@ def get_user_blogs_based_on_category(blogs):
         return serialized
 
 
-""" A function to get the all the data of an blog  """
-def get_blog_info (category, image_id, data):
+""" A function to create a comment"""
+def create_comment (category, image_id, data):
 
         blog = category.query.filter_by(image_id=image_id).first()
         if blog:
