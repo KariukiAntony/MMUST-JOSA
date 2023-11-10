@@ -19,7 +19,7 @@ class User(db.Model):
           business = db.relationship("Business", backref="user", passive_deletes=True)
           sports = db.relationship("Sports", backref="user", passive_deletes=True)
           entertainment = db.relationship("Entertainment", backref="user", passive_deletes=True)
-
+          comment=db.relationship("Comment",backref='user',passive_deletes=True)
 
           def user_dict(self):
                
@@ -75,3 +75,13 @@ class Entertainment(db.Model):
         author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 
 
+class Comment(db.Model):
+       id = db.Column(db.Integer, primary_key=True)
+       content = db.Column(db.Text, nullable=False)
+       timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+       parent_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
+       is_anonymous = db.Column(db.Boolean, default=True)
+       author_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+
+       def __repr__(self):
+         return f'<Comment {self.id}>'

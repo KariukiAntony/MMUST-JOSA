@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, Response, json
-from src.models.database import User, News, Business, Sports, Entertainment
+from src.models.database import User, News, Business, Sports, Entertainment,Comment
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from ..models.database import db
 from flask_cors import cross_origin
@@ -238,3 +238,33 @@ def get_user_blogs_based_on_category(blogs):
                 })
 
         return serialized
+
+@blogs.route('/createcomments', methods=['POST'])
+@cross_origin() 
+def create_comment():
+       data = request.get_json()
+       content=data.get('content')
+       parent_id=data.get('parent_id')
+       is_anonymous=data.get('is_anonymous',True)
+       comment=Comment(content=content,parent_id=parent_id,is_anonymous=is_anonymous)
+       db.session.add(comment)
+       db.session.commit()
+
+       return jsonify(message='Comment created successfuly'),201
+
+@blogs.route('/comments', methods=['GET'])
+@cross_origin()
+def get_comments():
+    comments = Comment.query.filter_by(parent_id=None).all()
+    comment_list = []
+
+    for comment in comments:
+        comment_data = {
+            'id': comment.id,
+            'content': comment.content,
+            'timestamp': comment.timestamp,
+            'is_anonymous': comment.is_anonymous
+        }
+        comment_list.append(comment_data)
+
+    return jsonify(comments=comment_list)
