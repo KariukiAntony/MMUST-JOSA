@@ -105,33 +105,37 @@ def get_all_info(category, image_id):
         return jsonify({"error": "Invalid category"}), 400
 
 """ An endpoint to create  a blog """
-@blogs.route("/createblog", methods=["POST"])
+@blogs.route("/api/v1/createblog", methods=["POST"])
 @cross_origin() 
 @jwt_required()
 def create_a_new_blog():
-        if not request.content_type == "application/json":
-              return jsonify({"failed": "content_type must be application/json"}), 400
+        # if not request.content_type == "application/json":
+        #       return jsonify({"failed": "content_type must be application/json"}), 400
         user_id = get_jwt_identity()
+        print("user id", user_id)
+        print("Hello world")
         data = request.get_json()
-        if validate_blog_data(data):
-                if data["category"] == "News":
-                    add_new_blog_data(News, data, user_id)
-                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
+        print(data)
+        # if validate_blog_data(data):
+        #         if data["category"] == "News":
+        #             add_new_blog_data(News, data, user_id)
+        #             return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
                 
-                elif data["category"] == "Business":
-                    add_new_blog_data(Business, data, user_id)
-                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
+        #         elif data["category"] == "Business":
+        #             add_new_blog_data(Business, data, user_id)
+        #             return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
                 
-                elif data["category"] == "Sports":
-                    add_new_blog_data(Sports, data, user_id)
-                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
+        #         elif data["category"] == "Sports":
+        #             add_new_blog_data(Sports, data, user_id)
+        #             return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
                 
-                elif data["category"] == "Entertainment":
-                    add_new_blog_data(Entertainment, data, user_id)
-                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
+        #         elif data["category"] == "Entertainment":
+        #             add_new_blog_data(Entertainment, data, user_id)
+        #             return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
 
         
-        return jsonify({"failed": "All fields are required"}), 400
+        # return jsonify({"failed": "All fields are required"}), 400
+        return "Hello world"
 
 
 """ An endpoint to get all the blogs written by the current user """
