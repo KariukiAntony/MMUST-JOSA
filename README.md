@@ -208,3 +208,29 @@ A limited number of blogs from each category are displayed here . Blogs are disp
 	}
     ```
 
+ ## Single Blog
+  when a user clicks on a single blog, the frontend sends a request with the image_id related to the blog and the category of the blog to the backed where the backend returns all the info related to the blog. .
+
+  + url: GET  [https://mmust-jowa.onrender.com/api/]()
+
+  + The response  body  is a list/array of all the business blogs.
+    
+  +
+    ```python
+    Response Body of a single blog in the array:
+
+        title: string
+        slug: string 
+        author: string 
+        image_id: string 
+        published_on: string
+    
+    Exampe of a Response Body of a single blog in the array
+      {
+		"image_id": "0123456712325.jpg",
+		"published_on": "Tue, 07 Nov 2023 11:14:27 GMT",
+		"slug": "This is a long blog",
+		"title": "This is a long blog"
+	}
+    ```
+
