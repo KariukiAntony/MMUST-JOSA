@@ -126,7 +126,7 @@ def get_all_user_blogs(fullname):
 
 
 """ An endpoint to create comment associated with a blog """
-@blogs.route('/blogs/comment/<string:category>/<string:image_id>', methods=['POST'])
+@blogs.route('/comment/<string:category>/<string:image_id>', methods=['POST'])
 @cross_origin() 
 def create_comment(category, image_id):
         success_message = f"new {category} comment added successfully"

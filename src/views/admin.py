@@ -85,33 +85,10 @@ def delete_blog_in_latest(image_id):
 @jwt_required()
 def get_all_user_blogs():
     user_id = get_jwt_identity()
-    print(user_id)
     user_news_blogs =  News.query.filter_by(author_id=user_id).order_by(News.id.desc()).all()
-    seliarized_blogs = seliarize_user_blogs(user_blogs=user_news_blogs)
+    seliarized_blogs = seliarize_user_news__blogs(user_blogs=user_news_blogs)
     return seliarized_blogs, 200
 
-
-def seliarize_user_blogs(user_blogs):
-    seliarized = []
-    for blog in user_blogs:
-        selialized_comments = []
-        for comment in blog.comments:
-            selialized_comments.append(
-                {
-                    "content": comment.content,
-                    "is_is_anonymous": comment.is_anonymous
-                }
-            )
-        seliarized.append({
-             "title": blog.title,
-             "slug": blog.slug,
-             "image_id": blog.image_id,
-             "body": blog.body,
-             "published_on": blog.published_on,
-             "comments": selialized_comments
-        })
-            
-    return seliarized
 
 """ An endpoint to create  a blog """
 @admin.route("/createblog", methods=["POST"])
@@ -145,7 +122,7 @@ def create_a_new_blog():
 
 
 """ A function to add blogs according to its category """
-def add_new_blog_data(model, data, author_id):
+def add_new_blog_data(model, data, author_id)-> None:
         new_blog = model(title=data["title"],
                           slug=data["slug"], 
                           image_id=data["image_id"],
@@ -156,7 +133,7 @@ def add_new_blog_data(model, data, author_id):
         db.session.commit()
 
 """ A function to validate blogs info """
-def validate_blog_data(user_input):
+def validate_blog_data(user_input) -> bool:
         
         if "title" in user_input and "slug" in user_input and "body" \
             in user_input and "image_id" in user_input \
@@ -164,6 +141,31 @@ def validate_blog_data(user_input):
                 return True
         
         return False
+
+""" A function to seliarize all news blogs owned by admin """
+def seliarize_user_news__blogs(user_blogs) -> list:
+    seliarized = []
+    for blog in user_blogs:
+        selialized_comments = []
+        blog_comments =  NewsComments.query.filter_by(blog_id=blog.id).order_by(NewsComments.id.desc()).all()
+        for comment in blog_comments:
+            selialized_comments.append(
+                {
+                    "content": comment.content,
+                    "is_anonymous": comment.is_anonymous,
+                    "commented_on": comment.date_created
+                }
+            )
+        seliarized.append({
+             "title": blog.title,
+             "slug": blog.slug,
+             "image_id": blog.image_id,
+             "body": blog.body,
+             "published_on": blog.published_on,
+             "comments": selialized_comments
+        })
+            
+    return seliarized
 
         
           
