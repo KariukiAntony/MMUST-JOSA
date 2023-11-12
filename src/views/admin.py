@@ -79,7 +79,7 @@ def delete_blog_in_latest(image_id):
       return {"error": f"Image with id {image_id} not found"}, 404
 
 
-""" An endpoint to give all the News blogs written by admin """
+""" An endpoint to get all the News blogs written by admin """
 @admin.route("/blogs/News")
 @cross_origin()
 @jwt_required()
@@ -90,7 +90,7 @@ def get_all_user_news__blogs():
     return seliarized_blogs, 200
 
 
-""" An endpoint to give all the Business blogs written by admin """
+""" An endpoint to get all the Business blogs written by admin """
 @admin.route("/blogs/Business")
 @cross_origin()
 @jwt_required()
@@ -98,6 +98,17 @@ def get_all_user_business_blogs():
     user_id = get_jwt_identity()
     user_news_blogs =  Business.query.filter_by(author_id=user_id).order_by(Business.id.desc()).all()
     seliarized_blogs = seliarize_user_news__blogs(user_blogs=user_news_blogs, comments_model=BusinessComments)
+    return seliarized_blogs, 200
+
+
+""" An endpoint to get all the Sports blogs written by admin """
+@admin.route("/blogs/Sports")
+@cross_origin()
+@jwt_required()
+def get_all_user_sports_blogs():
+    user_id = get_jwt_identity()
+    user_news_blogs =  Sports.query.filter_by(author_id=user_id).order_by(Sports.id.desc()).all()
+    seliarized_blogs = seliarize_user_news__blogs(user_blogs=user_news_blogs, comments_model=SportsComments)
     return seliarized_blogs, 200
 
 
