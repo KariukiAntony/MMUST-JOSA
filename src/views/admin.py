@@ -112,6 +112,17 @@ def get_all_user_sports_blogs():
     return seliarized_blogs, 200
 
 
+""" An endpoint to get all the Sports blogs written by admin """
+@admin.route("/blogs/Entertainment")
+@cross_origin()
+@jwt_required()
+def get_all_user_entertainment_blogs():
+    user_id = get_jwt_identity()
+    user_news_blogs =  Entertainment.query.filter_by(author_id=user_id).order_by(Entertainment.id.desc()).all()
+    seliarized_blogs = seliarize_user_news__blogs(user_blogs=user_news_blogs, comments_model=EntertainmentComments)
+    return seliarized_blogs, 200
+
+
 """ An endpoint to create  a blog """
 @admin.route("/createblog", methods=["POST"])
 @cross_origin() 
