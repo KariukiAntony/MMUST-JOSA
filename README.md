@@ -1,5 +1,5 @@
 # MMUST-JOWA
-This project contains code for a blogging web app which enables users to easily share, express and publish the contents in the form of blog.
+This project contains code for a blogging web application that will enable users to easily share, express and publish content in the form of blogs.
 
 
 ### Technologies Used
@@ -18,9 +18,11 @@ user@username:~$ source my_venv/bin/activate  # for linux users
 user@username:~$ pip3 install -r requirements.txt  #install all the dependecies used in this project
 user@username:~$ flask run  # use this command to start the server
 ```  
-### User registration    
-#### User gets registered to the system by making a request to the endpoint below
-   + url: POST  [https://mmust-jowa.onrender.com/api/auth/register]()
+
+# ADMIN
+## Admin registration    
+#### Admin gets registered to the system by making a request to the endpoint below
+   + url: POST  [https://mmust-jowa.onrender.com/api/v1/auth/register]()
    ```python
     headers: 
         Content-type: application/json
@@ -35,10 +37,9 @@ user@username:~$ flask run  # use this command to start the server
 The status_code of the response == 201 if the registration is successfull else returns a bad request error.(400).
 user should double check the registration credentials.
 
-## User Login  
-#### User gets logged into the system by making a post request to the following endpoint
-https://mmust-jowa.onrender.com/
- + url: POST  [https://mmust-jowa.onrender.com/api/auth/login]()
+## Admin Login  
+#### Admin gets logged into the system by making a post request to the following endpoint
+ + url: POST  [https://mmust-jowa.onrender.com/api/v1/auth/login]()
    ```python
     headers: 
         Content-type: application/json
@@ -47,11 +48,182 @@ https://mmust-jowa.onrender.com/
        email: string,
        password: string
    ````
-User is given an access token, with The status_code of the response == 200 if the login is successfull else returns unauthorized error.(401).
+User is given an access and a refresh token, while The status_code of the response == 200 if the login is successfull else returns unauthorized error.(401).
 
+## Total Blogs 
+#### On the dashboard, admin is able to see the total number of blogs. he/she has written.
+
+  + url: GET [https://mmust-jowa.onrender.com/api/v1/admin/totalblogs]()
+  +
+    ```python
+    headers:
+      content-type: application/json
+      Authorization: Bearer <token>
+    ```
+  +
+    ```python
+
+    Example of a response  body.
+    
+    10
+    ```
+      - where 10 is the total number of blogs.
+
+     The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that all the access token is valid.
+
+## Latest Five News Blogs 
+#### On the dashboard, admin is able to see latest five news blogs that he/she has written.
+  + url:  GET  [https://mmust-jowa.onrender.com/api/v1/admin/news/latest]()
+  +
+    ```python
+    headers:
+      content-type: application/json
+      Authorization: Bearer <token>
+    ```
+  +
+    ```python
+    The response is an array containing five elements.
+
+    Example of a response body of a single element in an array
+        {
+    "image_id": "123.4.jpg",
+    "published_on": "Sun, 12 Nov 2023 11:00:54 GMT",
+    "title": "This title has been created now"
+    }
+    ```
+     The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that the access token is valid.
+
+
+## Update News Blogs On the dashboard. 
+#### Since only the latest five news blogs are displayed on the dahboard, the admin may need to upadate them.
+  + url: PUT  [https://mmust-jowa.onrender.com/api/v1/admin/news/latest/update/<image_id>]()
+  +
+    ```python
+    headers:
+      content-type: application/json
+    ```
+  +
+    ```python
+    Request Body:
+        title: string
+        slug: string 
+        body: string
+
+    Example of a request body
+       { 
+        "title": "This is an updated title",
+        "slug": "This is an updated description",
+        "body": "This is an updated body"
+       }
+    ```
+     The status_code of the response == 202 if the blog was updated successfully else a not found error(404) is thrown. user should ensure that the image provided is valid.
+
+## Delete News Blogs On the Dashboard 
+#### Admin has the previledge to delete any of the latest news blogs
+  + url: DELETE [https://mmust-jowa.onrender.com/news/latest/delete/<image_id>]()
+  +
+    ```python
+    headers:
+      content-type: application/json
+    ```
+     The status_code of the response == 204 if the blog was deleted successfully else a not found error(404) is thrown. user should ensure that the image id provided is valid.
+
+
+## All News Blogs 
+#### The admin is able to get all the news blogs associated with him/her.
+  + url:  GET  [https://mmust-jowa.onrender.com/api/v1/admin/blogs/news]()
+  +
+    ```python
+    headers:
+      content-type: application/json
+      Authorization: Bearer <token>
+    ```
+  +
+    ```python
+    The response is an array containing all news blogs and associated comments.
+
+    Example of a response body of a single element in the array
+       {
+    "body": "These sectors will be a tool for integrating communities while advancing ",
+    "comments": [
+      {
+        "commented_on": "Sun, 12 Nov 2023 09:40:15 GMT",
+        "content": "This is another  cool blog",
+        "is_anonymous": false
+      },
+      {
+        "commented_on": "Sun, 12 Nov 2023 09:40:15 GMT",
+        "content": "This is another  cool blog",
+        "is_anonymous": true
+      },
+    ],
+    "image_id": "123457.jpg",
+    "published_on": "Fri, 10 Nov 2023 13:12:40 GMT",
+    "slug": "The problems in Meru are a mix of politics and cultural hate for women ",
+    "title": "The problems in Meru are a mix of politics and cultural hate for women"
+    }
+    ```
+     The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that the access token is valid.
+
+## All Business Blogs 
+#### The admin is able to get all busness blogs associated with him/her.
+  + url:  GET  [https://mmust-jowa.onrender.com/api/v1/admin/blogs/business]()
+  +
+    ```python
+    headers:
+      content-type: application/json
+      Authorization: Bearer <token>
+    ```
+  +
+    ```python
+    The response is an array containing all business blogs and associated comments.
+
+    Example of a response body of a single element in the array
+       {
+    "body": "These sectors will be a tool for integrating communities while advancing ",
+    "comments": [
+      {
+        "commented_on": "Sun, 12 Nov 2023 09:40:15 GMT",
+        "content": "This is another  cool blog",
+        "is_anonymous": false
+      },
+      {
+        "commented_on": "Sun, 12 Nov 2023 09:40:15 GMT",
+        "content": "This is another  cool blog",
+        "is_anonymous": true
+      },
+    ],
+    "image_id": "123457.jpg",
+    "published_on": "Fri, 10 Nov 2023 13:12:40 GMT",
+    "slug": "The problems in Meru are a mix of politics and cultural hate for women ",
+    "title": "The problems in Meru are a mix of politics and cultural hate for women"
+    }
+    ```
+     The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that the access token is valid.
+## All Sports Blogs 
+#### The admin is able to get all sports blogs associated with him/her.
+  + url:  GET  [https://mmust-jowa.onrender.com/api/v1/admin/blogs/sports]()
+  +
+    ```python
+    headers:
+      content-type: application/json
+      Authorization: Bearer <token>
+    ```
+     The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that the access token is valid.
+
+## All Entertainment  Blogs 
+#### The admin is able to get all entertainment  blogs associated with him/her.
+  + url:  GET  [https://mmust-jowa.onrender.com/api/v1/admin/blogs/entertainment]()
+  +
+    ```python
+    headers:
+      content-type: application/json
+      Authorization: Bearer <token>
+    ```
+     The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that the access token is valid.
 ## Create Blogs 
-#### Only users with access previledges are able to create blogs.
-  + url:  POST  [https://mmust-jowa.onrender.com/createblog]()
+#### After being logged into the system, admin can be able to create a blog.
+  + url:  POST  [https://mmust-jowa.onrender.com/api/v1/admin/createblog]()
   +
     ```python
     headers:

@@ -35,7 +35,7 @@ def get_admin_total_blogs():
 
 
 """ An endpoint to get the latest five news blogs """
-@admin.route("/latest")
+@admin.route("/news/latest")
 @cross_origin()
 @jwt_required()
 def get_latest_five_news_blogs():
@@ -52,7 +52,7 @@ def get_latest_five_news_blogs():
     return serialized
 
 """ An endpoint to update the blogs in the admin dashboard """
-@admin.route("/News/latest/update/<string:image_id>", methods = ["POST"])
+@admin.route("/news/latest/update/<string:image_id>", methods = ["PUT"])
 @cross_origin()
 def update_blog_in_latest_news(image_id):
       data = request.get_json()
@@ -68,7 +68,7 @@ def update_blog_in_latest_news(image_id):
 
 
 """ An endpoint to delete the five latest blogs in admin homepage """
-@admin.route("/News/latest/delete/<string:image_id>")
+@admin.route("/news/latest/delete/<string:image_id>", methods=["DELETE"])
 @cross_origin()
 def delete_blog_in_latest(image_id):
       blog = News.query.filter_by(image_id=image_id).first()
@@ -81,7 +81,7 @@ def delete_blog_in_latest(image_id):
 
 
 """ An endpoint to get all the News blogs written by admin """
-@admin.route("/blogs/News")
+@admin.route("/blogs/news")
 @cross_origin()
 @jwt_required()
 def get_all_user_news__blogs():
@@ -92,7 +92,7 @@ def get_all_user_news__blogs():
 
 
 """ An endpoint to get all the Business blogs written by admin """
-@admin.route("/blogs/Business")
+@admin.route("/blogs/business")
 @cross_origin()
 @jwt_required()
 def get_all_user_business_blogs():
@@ -103,7 +103,7 @@ def get_all_user_business_blogs():
 
 
 """ An endpoint to get all the Sports blogs written by admin """
-@admin.route("/blogs/Sports")
+@admin.route("/blogs/sports")
 @cross_origin()
 @jwt_required()
 def get_all_user_sports_blogs():
@@ -114,7 +114,7 @@ def get_all_user_sports_blogs():
 
 
 """ An endpoint to get all the Sports blogs written by admin """
-@admin.route("/blogs/Entertainment")
+@admin.route("/blogs/entertainment")
 @cross_origin()
 @jwt_required()
 def get_all_user_entertainment_blogs():
