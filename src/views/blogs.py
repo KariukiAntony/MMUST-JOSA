@@ -33,7 +33,7 @@ def home_page():
 
 
 """ An endpoint to get all the news blogs in the database """
-@blogs.route("/news")
+@blogs.route("/News")
 @cross_origin() 
 def get_all_news_blogs():
 
@@ -41,7 +41,7 @@ def get_all_news_blogs():
         return all_news, 200
 
 """ An endpoint to get all the business blogs in the database """
-@blogs.route("/business")
+@blogs.route("/Business")
 @cross_origin() 
 def get_all_business_blogs():
 
@@ -51,7 +51,7 @@ def get_all_business_blogs():
 
 
 """ An endpoint to get all the Sports blogs in the database """
-@blogs.route("/sports")
+@blogs.route("/Sports")
 @cross_origin() 
 def get_all_sports_blogs():
 
@@ -61,7 +61,7 @@ def get_all_sports_blogs():
 
 
 """ An endpoint to get all the entertainment blogs in the database """
-@blogs.route("/entertainment")
+@blogs.route("/Entertainment")
 @cross_origin() 
 def get_all_entertainment_blogs():
 
@@ -70,7 +70,7 @@ def get_all_entertainment_blogs():
         return all_entertainment, 200
 # best code 
 """  An endpoint to get the data associated with and image_id presented  """
-@blogs.route('/blogs/<string:category>/<string:image_id>')
+@blogs.route('/<string:category>/<string:image_id>')
 @cross_origin() 
 def get_all_info(category, image_id): 
         error_message = {"error": f"{category} Image with id {image_id} does not exist"}        
@@ -106,7 +106,7 @@ def get_all_info(category, image_id):
 
 
 """ An endpoint to get all the blogs written by the current user """
-@blogs.route("/userblogs/<string:fullname>")
+@blogs.route("/authorblogs/<string:fullname>")
 @cross_origin() 
 def get_all_user_blogs(fullname):
         first_name = fullname.split(" ")[0]
@@ -119,7 +119,7 @@ def get_all_user_blogs(fullname):
                combined_blogs = news_blogs+business_blogs+sports_blogs+entertainment_blogs
                total_blogs = len(news_blogs) + len(business_blogs) + len(sports_blogs) + len(entertainment_blogs)
                 
-               return {total_blogs: combined_blogs}, 200
+               return [total_blogs, combined_blogs], 200
 
         else:
             return {"error": f"No user with username {first_name}"}, 400
