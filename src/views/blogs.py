@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify, Response, json
 from src.models.database import( User, News, Business, Sports, Entertainment,NewsComments,
 BusinessComments, SportsComments, EntertainmentComments)
-from flask_jwt_extended import get_jwt_identity, jwt_required
 from ..models.database import db
 from flask_cors import cross_origin
 
@@ -198,7 +197,7 @@ def get_all_blogs_with_category(model)-> list:
                                 "title": blog.title,
                                 "slug": blog.slug,
                                 "image_id": blog.image_id,
-                                "published_on": blog.published_on,
+                                "published_on": get_good_time(blog.published_on),
                         }
                 )
         
@@ -215,7 +214,7 @@ def get_blog_info (category, image_id):
                 "image_id": data.image_id,
                 "body": data.body,
                 "author": f"{author.first_name} {author.last_name}",
-                "published on": data.published_on
+                "published on": get_good_time(data.published_on)
                  }
                  )
         else:
@@ -229,7 +228,7 @@ def get_user_blogs_based_on_category(blogs):
                         "image_id": blog.image_id,
                         "title": blog.title,
                         "slug": blog.slug,
-                        "published_on": blog.published_on
+                        "published_on": get_good_time(blog.published_on)
                 })
 
         return serialized
