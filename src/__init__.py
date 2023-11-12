@@ -98,7 +98,7 @@ def create_app(config = config_dict["dev"]):
          return jsonify({"error": str(e)})
      
      app.register_blueprint(auth, url_prefix="/api/v1/auth", strict_slashes=False)
-     app.register_blueprint(blogs, url_prefix="/api/v1/blogs", strict_slashes=False)
+     app.register_blueprint(blogs, url_prefix="/api/v1/user", strict_slashes=False)
      app.register_blueprint(admin, url_prefix="/api/v1/admin", strict_slashes=False)
 
      def create_database():

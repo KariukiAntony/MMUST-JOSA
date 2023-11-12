@@ -10,7 +10,7 @@ def get_good_time(db_time):
        local_date = db_time.astimezone(local_timezone)                                                                                                                                                                                                                                                                    
        return local_date
 
-blogs = Blueprint("view", __name__, url_prefix="/")
+blogs = Blueprint("view", __name__,)
 
 @blogs.route("/")
 @cross_origin() 
@@ -32,7 +32,7 @@ def home_page():
 
 
 """ An endpoint to get all the news blogs in the database """
-@blogs.route("/News")
+@blogs.route("/news")
 @cross_origin() 
 def get_all_news_blogs():
 
@@ -40,7 +40,7 @@ def get_all_news_blogs():
         return all_news, 200
 
 """ An endpoint to get all the business blogs in the database """
-@blogs.route("/Business")
+@blogs.route("/business")
 @cross_origin() 
 def get_all_business_blogs():
 
@@ -50,7 +50,7 @@ def get_all_business_blogs():
 
 
 """ An endpoint to get all the Sports blogs in the database """
-@blogs.route("/Sports")
+@blogs.route("/sports")
 @cross_origin() 
 def get_all_sports_blogs():
 
@@ -60,7 +60,7 @@ def get_all_sports_blogs():
 
 
 """ An endpoint to get all the entertainment blogs in the database """
-@blogs.route("/Entertainment")
+@blogs.route("/entertainment")
 @cross_origin() 
 def get_all_entertainment_blogs():
 

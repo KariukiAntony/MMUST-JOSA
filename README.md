@@ -64,7 +64,7 @@ User is given an access and a refresh token, while The status_code of the respon
     ```python
 
     Example of a response  body.
-    
+
     10
     ```
       - where 10 is the total number of blogs.
@@ -254,7 +254,7 @@ User is given an access and a refresh token, while The status_code of the respon
 
 ## Home page of the blog app
 A limited number of blogs from each category are displayed here . Blogs are displayed according to the time they were created with the latest blog being the first.
-  + url: GET  [https://mmust-jowa.onrender.com/]()
+  + url: GET  [https://mmust-jowa.onrender.com/api/v1/user/]()
 
   + The response  body of the  * _RESPONSE_* have the following fields
     
@@ -282,7 +282,7 @@ A limited number of blogs from each category are displayed here . Blogs are disp
   ## News Blogs
   when a user clicks on the news button on the navbar, the frontend sends a request to the backed which then returnes all blogs associated with the news category.
 
-  + url: GET  [https://mmust-jowa.onrender.com/news]()
+  + url: GET  [https://mmust-jowa.onrender.com/api/v1/user/news]()
 
   + The response  body  is a list/array of all the news blogs.
     
@@ -309,7 +309,7 @@ A limited number of blogs from each category are displayed here . Blogs are disp
  ## Business Blogs
   when a user clicks on the business button on the navbar, the frontend sends a request to the backed which then returnes all blogs associated with the business category.
 
-  + url: GET  [https://mmust-jowa.onrender.com/business]()
+  + url: GET  [https://mmust-jowa.onrender.com/api/v1/user/business]()
 
   + The response  body  is a list/array of all the business blogs.
     
@@ -335,7 +335,7 @@ A limited number of blogs from each category are displayed here . Blogs are disp
 
  ## Sports Blogs
 
-  + url: GET  [https://mmust-jowa.onrender.com/sports]()
+  + url: GET  [https://mmust-jowa.onrender.com/api/v1/user/sports]()
     
   +
     ```python
@@ -359,7 +359,7 @@ A limited number of blogs from each category are displayed here . Blogs are disp
 
  ## Entertainment Blogs
 
-  + url: GET  [https://mmust-jowa.onrender.com/entertainment]()
+  + url: GET  [https://mmust-jowa.onrender.com/api/v1/user/entertainment]()
     
   +
     ```python
@@ -381,9 +381,9 @@ A limited number of blogs from each category are displayed here . Blogs are disp
     ```
 
  ## Single Blog
-  when a user clicks on a single blog, the frontend sends a request with the image_id related to the blog and the category of the blog to the backed where the backend returns all the info related to the blog. on the url below, replace category with the the blog category ie Business and imaged_id with the image id.
+  when a user clicks on a single blog, the frontend sends a request with the image_id related to the blog and the category of the blog to the backed where the backend returns all the info related to the blog. on the url below, replace CATEGORY with the the blog category ie Business and imaged_id with the image id.
 
-  + url: GET  [https://mmust-jowa.onrender.com/blogs/category/image_id]()
+  + url: GET  [https://mmust-jowa.onrender.com/api/v1/user/category/image_id]()
 
 
     
@@ -405,4 +405,30 @@ A limited number of blogs from each category are displayed here . Blogs are disp
 		"title": "This is a long blog"
 	}
     ```
+
+ ## User Blogs
+  This endpoint return all the blog associated with the author. 
+
+  + url: GET  [https://mmust-jowa.onrender.com/api/v1/user/authorblogs/fullname]()
+    
+    - where fullname is the name of the author
+
+    
+  +
+    ```python
+    
+    Exampe of a Response Body
+      [
+        1,
+        [
+          {
+            "image_id": "123.5.jpg",
+            "published_on": "Sun, 12 Nov 2023 11:15:13 GMT",
+            "slug": "This is image with id: 123.5.jpg",
+            "title": "This title was updated by daniel gathaga"
+          }
+        ]
+      ]
+    ```
+  - where 1 is the total number of blogs writen by the author
 
