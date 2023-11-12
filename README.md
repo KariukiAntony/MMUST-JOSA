@@ -120,7 +120,7 @@ User is given an access and a refresh token, while The status_code of the respon
 
 ## Delete News Blogs On the Dashboard 
 #### Admin has the previledge to delete any of the latest news blogs
-  + url: DELETE [https://mmust-jowa.onrender.com/news/latest/delete/<image_id>]()
+  + url: DELETE [https://mmust-jowa.onrender.com/api/v1/admin/news/latest/delete/<image_id>]()
   +
     ```python
     headers:
@@ -250,8 +250,21 @@ User is given an access and a refresh token, while The status_code of the respon
        }
     ```
      The status_code of the response == 201 if the blog was created successfully else a bad request error(400) is thrown. user should ensure that all the fields above are included.
+## Delete Blogs 
+#### Admin has the previledge to delete any of his/her blogs
+  + url: DELETE [https://mmust-jowa.onrender.com/api/v1/admin/blogs/delete/category/<image_id>]()
+    - replace category with the exact category
+    - replace <image_id> with the specific image_id 
+  +
+    ```python
+    headers:
+      content-type: application/json
+    ```
+     The status_code of the response == 204 if the blog was deleted successfully else a not found error(404) is thrown. user should ensure that the image id provided is valid.
+     
+     <br>
 
-
+# USERS
 ## Home page of the blog app
 A limited number of blogs from each category are displayed here . Blogs are displayed according to the time they were created with the latest blog being the first.
   + url: GET  [https://mmust-jowa.onrender.com/api/v1/user/]()

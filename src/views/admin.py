@@ -154,6 +154,36 @@ def create_a_new_blog():
         
         return jsonify({"failed": "All fields are required"}), 400
 
+""" An endpoint to delete a blog based on the category """
+@admin.route("/blogs/delete/<string:category>/<string:image_id>", methods=["DELETE"])
+def delete_blog(category, image_id):
+    if category == "News":
+        if delete_blog(category=News, image_id=image_id):
+             return " ", 204
+
+        return jsonify({"failed": "double check the image_id"}), 404
+
+    elif category == "Business":
+        if delete_blog(category=Business, image_id=image_id):
+             return " ", 204
+
+        return jsonify({"failed": "double check the image_id"}), 404
+    
+    elif category == "Sports":
+        if delete_blog(category=Sports, image_id=image_id):
+             return " ", 204
+
+        return jsonify({"failed": "double check the image_id"}), 404
+
+    elif category == "Entertainment":
+        if delete_blog(category=Entertainment, image_id=image_id):
+             return " ", 204
+
+        return jsonify({"failed": "double check the image_id"}), 404
+
+    else:
+        return jsonify({"failed": "Invalid category passed"}), 404
+
 
 """ A function to add blogs according to its category """
 def add_new_blog_data(model, data, author_id)-> None:
@@ -201,6 +231,15 @@ def seliarize_user_news__blogs(user_blogs, comments_model) -> list:
             
     return seliarized
 
+""" A function to delete a blog """
+def delete_blog(category, image_id) -> bool:
+    data = category.query.filter_by(image_id=image_id).first()
+    if data:
+        db.session.delete(data)
+        db.session.commit()
+        return True
+
+    return False
         
           
             
