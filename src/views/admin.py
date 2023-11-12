@@ -5,8 +5,32 @@ from src.models.database import( User, News, Business, Sports, Entertainment,New
 BusinessComments, SportsComments, EntertainmentComments)
 from flask_jwt_extended import get_jwt_identity, jwt_required
 import requests
+import logging
 
 admin = Blueprint("admin", __name__,)
+
+
+""" An endpoint to get the total number of blogs owned by admin """
+@admin.route("/totalblogs")
+@cross_origin()
+@jwt_required()
+def get_admin_total_blogs():
+    user_id = get_jwt_identity()
+    author = User.query.filter_by(id=user_id).first()
+    author_first_name = author.first_name
+    try:
+        res = requests.get(f"http://127.0.0.1:5000/api/v1/blogs/authorblogs/{author_first_name}")
+        if res.status_code == 200:
+            total_blogs = res.json()[0]
+            return str(total_blogs), 200
+
+        logging.error(f"failed to send the request with status code: {res.status_code}")
+
+    except Exception as e:
+          logging.error(f"An error has occured: {e}")
+    
+    return author_first_name, 200
+
 
 
 """ An endpoint to get the latest five news blogs """
