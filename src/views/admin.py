@@ -83,10 +83,21 @@ def delete_blog_in_latest(image_id):
 @admin.route("/blogs/News")
 @cross_origin()
 @jwt_required()
-def get_all_user_blogs():
+def get_all_user_news__blogs():
     user_id = get_jwt_identity()
     user_news_blogs =  News.query.filter_by(author_id=user_id).order_by(News.id.desc()).all()
-    seliarized_blogs = seliarize_user_news__blogs(user_blogs=user_news_blogs)
+    seliarized_blogs = seliarize_user_news__blogs(user_blogs=user_news_blogs, comments_model=NewsComments)
+    return seliarized_blogs, 200
+
+
+""" An endpoint to give all the Business blogs written by admin """
+@admin.route("/blogs/Business")
+@cross_origin()
+@jwt_required()
+def get_all_user_business_blogs():
+    user_id = get_jwt_identity()
+    user_news_blogs =  Business.query.filter_by(author_id=user_id).order_by(Business.id.desc()).all()
+    seliarized_blogs = seliarize_user_news__blogs(user_blogs=user_news_blogs, comments_model=BusinessComments)
     return seliarized_blogs, 200
 
 
@@ -142,12 +153,12 @@ def validate_blog_data(user_input) -> bool:
         
         return False
 
-""" A function to seliarize all news blogs owned by admin """
-def seliarize_user_news__blogs(user_blogs) -> list:
+""" A function to seliarize all blogs owned by admin according to blogs passed"""
+def seliarize_user_news__blogs(user_blogs, comments_model) -> list:
     seliarized = []
     for blog in user_blogs:
         selialized_comments = []
-        blog_comments =  NewsComments.query.filter_by(blog_id=blog.id).order_by(NewsComments.id.desc()).all()
+        blog_comments = comments_model.query.filter_by(blog_id=blog.id).order_by(comments_model.id.desc()).all()
         for comment in blog_comments:
             selialized_comments.append(
                 {
