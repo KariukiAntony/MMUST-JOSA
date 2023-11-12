@@ -104,39 +104,6 @@ def get_all_info(category, image_id):
                 
         return jsonify({"error": "Invalid category"}), 400
 
-""" An endpoint to create  a blog """
-@blogs.route("/api/v1/createblog", methods=["POST"])
-@cross_origin() 
-@jwt_required()
-def create_a_new_blog():
-        # if not request.content_type == "application/json":
-        #       return jsonify({"failed": "content_type must be application/json"}), 400
-        user_id = get_jwt_identity()
-        print("user id", user_id)
-        print("Hello world")
-        data = request.get_json()
-        print(data)
-        # if validate_blog_data(data):
-        #         if data["category"] == "News":
-        #             add_new_blog_data(News, data, user_id)
-        #             return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
-                
-        #         elif data["category"] == "Business":
-        #             add_new_blog_data(Business, data, user_id)
-        #             return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
-                
-        #         elif data["category"] == "Sports":
-        #             add_new_blog_data(Sports, data, user_id)
-        #             return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
-                
-        #         elif data["category"] == "Entertainment":
-        #             add_new_blog_data(Entertainment, data, user_id)
-        #             return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
-
-        
-        # return jsonify({"failed": "All fields are required"}), 400
-        return "Hello world"
-
 
 """ An endpoint to get all the blogs written by the current user """
 @blogs.route("/userblogs/<string:fullname>")
@@ -253,27 +220,6 @@ def get_blog_info (category, image_id):
                  )
         else:
             return False
-
-""" A function to validate blogs info """
-def validate_blog_data(user_input):
-        
-        if "title" in user_input and "slug" in user_input and "body" \
-            in user_input and "image_id" in user_input \
-                  and "category" in user_input:
-                return True
-        
-        return False
-
-""" A function to add blogs according to its category """
-def add_new_blog_data(model, data, author_id):
-        new_blog = model(title=data["title"],
-                          slug=data["slug"], 
-                          image_id=data["image_id"],
-                          body=data["body"],
-                          author_id = author_id
-                          ) 
-        db.session.add(new_blog)
-        db.session.commit()
 
 """ A function to loop through a specific user blogs """
 def get_user_blogs_based_on_category(blogs):
