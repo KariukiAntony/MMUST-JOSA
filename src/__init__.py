@@ -8,7 +8,6 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from src.views.admin import admin
 
-""" A function for creating a database """
 
 """ A function for creating an application """
 def create_app(config = config_dict["dev"]):
@@ -18,15 +17,11 @@ def create_app(config = config_dict["dev"]):
      db.init_app(app=app)
      migrate.init_app(app=app)
      JWTManager(app)
-     def create_database():
-         with app.app_context():
-            db.create_all()
-            print("database tables created")
     #  cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     #  CORS(app, resources={r"/*": {"origins": "*",
     #                              "methods": ["GET", "POST", "PATCH", "DELETE"],
     #  
-     create_database()
+     create_database(app=app)
      required_headers = ["Content-Type", "Authorization"]
      cors = CORS(app, resources={r"/*": {
       "origins": "*",
@@ -54,7 +49,7 @@ def create_app(config = config_dict["dev"]):
           with app.app_context():
             db.drop_all()
             print("all database tables droped")
-            create_database()
+            create_database(app=app)
             print("database tables created again")
             return jsonify({"success": "All database tables dropped"}) 
 
@@ -72,3 +67,11 @@ def create_app(config = config_dict["dev"]):
      app.register_blueprint(admin, url_prefix="/api/v1/admin", strict_slashes=False)
      
      return app
+
+""" A function for creating a database """
+def create_database(app):
+        with app.app_context():
+            db.create_all()
+            print("database tables created")
+
+
