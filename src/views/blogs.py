@@ -4,12 +4,6 @@ BusinessComments, SportsComments, EntertainmentComments)
 from ..models.database import db
 from flask_cors import cross_origin
 
-import pytz
-local_timezone = pytz.timezone('Africa/Nairobi')  # Replace 'Africa/Nairobi' with your actual timezone
-def get_good_time(db_time):
-       local_date = db_time.astimezone(local_timezone)                                                                                                                                                                                                                                                                    
-       return local_date
-
 blogs = Blueprint("view", __name__,)
 
 @blogs.route("/")
@@ -173,7 +167,7 @@ def get_brief_home_news(model, page, per_page):
                         "author": get_the_user_based_on_author_id(blog.author_id),
                         "title": blog.title,
                         "slug": blog.slug,
-                        "published_on": get_good_time(blog.published_on)
+                        "published_on": blog.published_on
                 })
         
         return serialized
@@ -197,7 +191,7 @@ def get_all_blogs_with_category(model)-> list:
                                 "title": blog.title,
                                 "slug": blog.slug,
                                 "image_id": blog.image_id,
-                                "published_on": get_good_time(blog.published_on),
+                                "published_on": blog.published_on,
                         }
                 )
         
@@ -214,7 +208,7 @@ def get_blog_info (category, image_id):
                 "image_id": data.image_id,
                 "body": data.body,
                 "author": f"{author.first_name} {author.last_name}",
-                "published on": get_good_time(data.published_on)
+                "published on": data.published_on
                  }
                  )
         else:
@@ -228,7 +222,7 @@ def get_user_blogs_based_on_category(blogs):
                         "image_id": blog.image_id,
                         "title": blog.title,
                         "slug": blog.slug,
-                        "published_on": get_good_time(blog.published_on)
+                        "published_on": blog.published_on
                 })
 
         return serialized

@@ -6,6 +6,7 @@ class Config:
 
 class DevConfig(Config):
      SQLALCHEMY_DATABASE_URI = config("DATABASE_URI")
+     SQLALCHEMY_TIMEZONE = 'Africa/Nairobi'
      SQLALCHEMY_TRACK_MODIFICATION = False
      DEBUG = True
      JWT_SECRET_KEY = config("JWT_SECRET_KEY") 

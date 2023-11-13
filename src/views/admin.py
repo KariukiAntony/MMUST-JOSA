@@ -6,7 +6,6 @@ BusinessComments, SportsComments, EntertainmentComments)
 from flask_jwt_extended import get_jwt_identity, jwt_required
 import requests
 import logging
-from .blogs import get_good_time
 
 admin = Blueprint("admin", __name__,)
 
@@ -46,7 +45,7 @@ def get_latest_five_news_blogs():
             serialized.append({
                     "image_id": blog.image_id,
                     "title": blog.title,
-                    "published_on": get_good_time(blog.published_on)
+                    "published_on": blog.published_on
             })
     
     return serialized
@@ -217,7 +216,7 @@ def seliarize_user_news__blogs(user_blogs, comments_model) -> list:
                 {
                     "content": comment.content,
                     "is_anonymous": comment.is_anonymous,
-                    "commented_on": get_good_time(comment.date_created)
+                    "commented_on": comment.date_created
                 }
             )
         seliarized.append({
@@ -225,7 +224,7 @@ def seliarize_user_news__blogs(user_blogs, comments_model) -> list:
              "slug": blog.slug,
              "image_id": blog.image_id,
              "body": blog.body,
-             "published_on": get_good_time(blog.published_on),
+             "published_on": blog.published_on,
              "comments": selialized_comments
         })
             
