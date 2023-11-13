@@ -18,7 +18,11 @@ def create_app(config = config_dict["dev"]):
     #  CORS(app, resources={r"/*": {"origins": "*",
     #                              "methods": ["GET", "POST", "PATCH", "DELETE"],
     #  
-
+     def create_database():
+         with app.app_context():
+            db.create_all()
+            print("database tables created")
+            
      required_headers = ["Content-Type", "Authorization"]
      cors = CORS(app, resources={r"/*": {
       "origins": "*",
@@ -63,10 +67,5 @@ def create_app(config = config_dict["dev"]):
      
      app.register_blueprint(auth)
      app.register_blueprint(blogs)
-
-     def create_database():
-         with app.app_context():
-            db.create_all()
-            print("database tables created")
      
      return app
