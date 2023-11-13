@@ -3,8 +3,17 @@ from src.models.database import( User, News, Business, Sports, Entertainment,New
 BusinessComments, SportsComments, EntertainmentComments)
 from ..models.database import db
 from flask_cors import cross_origin
+from datetime import datetime, timedelta
 
 blogs = Blueprint("view", __name__,)
+
+""" A function to convert time from GMT to EAT """
+def covert_time_from_GMT_to_EAT(time_):
+    input_time = datetime.strptime(time_, "%a, %d %b %Y %H:%M:%S %Z")
+    time_in_eat = input_time + timedelta(hours=3)
+    time_in_eat_str = time_in_eat.strftime("%a, %d %b %Y %H:%M:%S %Z")
+    return time_in_eat
+       
 
 @blogs.route("/")
 @cross_origin() 
