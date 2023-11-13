@@ -9,11 +9,6 @@ from flask_cors import CORS
 from src.views.admin import admin
 
 """ A function for creating a database """
-def create_database(app):
-    if not path.exists("src/database.db"):
-        with app.app_context():
-            db.create_all()
-            print("database created")
 
 """ A function for creating an application """
 def create_app(config = config_dict["dev"]):
@@ -23,11 +18,15 @@ def create_app(config = config_dict["dev"]):
      db.init_app(app=app)
      migrate.init_app(app=app)
      JWTManager(app)
+     def create_database():
+         with app.app_context():
+            db.create_all()
+            print("database tables created")
     #  cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     #  CORS(app, resources={r"/*": {"origins": "*",
     #                              "methods": ["GET", "POST", "PATCH", "DELETE"],
     #  
-
+     create_database()
      required_headers = ["Content-Type", "Authorization"]
      cors = CORS(app, resources={r"/*": {
       "origins": "*",
@@ -71,10 +70,5 @@ def create_app(config = config_dict["dev"]):
      app.register_blueprint(auth, url_prefix="/api/v1/auth", strict_slashes=False)
      app.register_blueprint(blogs, url_prefix="/api/v1/user", strict_slashes=False)
      app.register_blueprint(admin, url_prefix="/api/v1/admin", strict_slashes=False)
-
-     def create_database():
-         with app.app_context():
-            db.create_all()
-            print("database tables created")
      
      return app
