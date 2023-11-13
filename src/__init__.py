@@ -9,34 +9,6 @@ from flask_cors import CORS
 from src.views.admin import admin
 
 """ A function for creating an application """
-def create_app(config = config_dict["dev"]):
-     
-     app = Flask(__name__)
-     app.config.from_object(config)
-     db.init_app(app=app)
-     migrate.init_app(app=app)
-     JWTManager(app)
-     create_database(app=app)
-
-     @app.after_request
-     def add_security_header(resp):
-         resp.headers["Content-Security-Policy"] = "default-src \'self\'"
-         return resp
-
-     @app.errorhandler(404)
-     def handle_not_found(e):
-         return jsonify({"error": str(e)})
-     
-
-     @app.errorhandler(500)
-     def handle_Internal_server_error(e):
-         return jsonify({"error": str(e)})
-     
-     app.register_blueprint(auth)
-     app.register_blueprint(blogs)
-     
-     return app
-
 
 def create_database(app):
     if not path.exists("src/database.db"):

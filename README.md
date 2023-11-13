@@ -32,7 +32,7 @@ user@username:~$ flask run  # use this command to start the server
        last_name: string,
        email: string,
        password: string,
-       confirm: string
+       confirm: string  
 ````
     
 The status_code of the response == 201 if the registration is successfull else returns a bad request error.(400).
