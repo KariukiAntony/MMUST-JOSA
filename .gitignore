@@ -3,3 +3,4 @@ __pycache__
 /instance
 test1.py
 require.txt
+.flaskenv
