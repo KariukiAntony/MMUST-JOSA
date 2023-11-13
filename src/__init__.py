@@ -1,10 +1,19 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from src.config.config import config_dict
 from src.models.database import db, migrate, User
+from os import path
 from src.auth.auth import auth
 from src.views.blogs import blogs
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from src.views.admin import admin
+
+""" A function for creating a database """
+def create_database(app):
+    if not path.exists("src/database.db"):
+        with app.app_context():
+            db.create_all()
+            print("database created")
 
 """ A function for creating an application """
 def create_app(config = config_dict["dev"]):
@@ -18,11 +27,7 @@ def create_app(config = config_dict["dev"]):
     #  CORS(app, resources={r"/*": {"origins": "*",
     #                              "methods": ["GET", "POST", "PATCH", "DELETE"],
     #  
-     def create_database():
-         with app.app_context():
-            db.create_all()
-            print("database tables created")
-            
+
      required_headers = ["Content-Type", "Authorization"]
      cors = CORS(app, resources={r"/*": {
       "origins": "*",
@@ -30,8 +35,6 @@ def create_app(config = config_dict["dev"]):
       "supports_credentials": True,
       "allow_headers": required_headers
      }})
-
-     create_database()
 
 
     #  @app.before_request
@@ -65,7 +68,13 @@ def create_app(config = config_dict["dev"]):
      def handle_Internal_server_error(e):
          return jsonify({"error": str(e)})
      
-     app.register_blueprint(auth)
-     app.register_blueprint(blogs)
+     app.register_blueprint(auth, url_prefix="/api/v1/auth", strict_slashes=False)
+     app.register_blueprint(blogs, url_prefix="/api/v1/user", strict_slashes=False)
+     app.register_blueprint(admin, url_prefix="/api/v1/admin", strict_slashes=False)
+
+     def create_database():
+         with app.app_context():
+            db.create_all()
+            print("database tables created")
      
      return app
