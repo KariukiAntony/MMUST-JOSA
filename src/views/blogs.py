@@ -120,6 +120,7 @@ def get_all_user_blogs(fullname):
                entertainment_blogs = get_user_blogs_based_on_category(all_blogs.entertainment)
                combined_blogs = news_blogs+business_blogs+sports_blogs+entertainment_blogs
                total_blogs = len(news_blogs) + len(business_blogs) + len(sports_blogs) + len(entertainment_blogs)
+               print("Total blogs: ", total_blogs)
                 
                return [total_blogs, combined_blogs], 200
 

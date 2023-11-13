@@ -54,7 +54,7 @@ User is given an access and a refresh token, while The status_code of the respon
 ## Total Blogs 
 #### On the dashboard, admin is able to see the total number of blogs. he/she has written.
 
-  + url: GET [https://mmust-jowa.onrender.com/api/v1/admin/totalblogs]()
+  + url: GET [https://mmust-jowa.onrender.com/api/v1/admin/total/blogs]()
   +
     ```python
     headers:
@@ -72,6 +72,30 @@ User is given an access and a refresh token, while The status_code of the respon
 
      The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that all the access token is valid.
 
+
+
+## Total Comments 
+#### On the dashboard, admin is able to see the total comments of the blogs. he/she has written.
+
+  + url: GET [https://mmust-jowa.onrender.com/api/v1/admin/total/comments]()
+  +
+    ```python
+    headers:
+      content-type: application/json
+      Authorization: Bearer <token>
+    ```
+  +
+    ```python
+
+    Example of a response  body.
+
+    10
+    ```
+      - where 10 is the total number of comments.
+
+     The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that all the access token is valid.
+
+
 ## Latest Five News Blogs 
 #### On the dashboard, admin is able to see latest five news blogs that he/she has written.
   + url:  GET  [https://mmust-jowa.onrender.com/api/v1/admin/news/latest]()
@@ -86,18 +110,20 @@ User is given an access and a refresh token, while The status_code of the respon
     The response is an array containing five elements.
 
     Example of a response body of a single element in an array
-        {
-    "image_id": "123.4.jpg",
-    "published_on": "Sun, 12 Nov 2023 11:00:54 GMT",
-    "title": "This title has been created now"
-    }
+       {
+    "id": 7,
+    "image": "1234.jpg",
+    "published_on": "Mon, 13 Nov 2023 20:47:48 GMT",
+    "title": "This news blog was added by daniel",
+    "total_comments": 3
+  }
     ```
      The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that the access token is valid.
 
 
 ## Update News Blogs On the dashboard. 
 #### Since only the latest five news blogs are displayed on the dahboard, the admin may need to upadate them.
-  + url: PUT  [https://mmust-jowa.onrender.com/api/v1/admin/news/latest/update/<image_id>]()
+  + url: PUT  [https://mmust-jowa.onrender.com/api/v1/admin/news/latest/update/< id>]()
   +
     ```python
     headers:
@@ -117,11 +143,11 @@ User is given an access and a refresh token, while The status_code of the respon
         "body": "This is an updated body"
        }
     ```
-     The status_code of the response == 202 if the blog was updated successfully else a not found error(404) is thrown. user should ensure that the image provided is valid.
+     The status_code of the response == 202 if the blog was updated successfully else a not found error(404) is thrown. user should ensure that the id  provided is valid.
 
 ## Delete News Blogs On the Dashboard 
 #### Admin has the previledge to delete any of the latest news blogs
-  + url: DELETE [https://mmust-jowa.onrender.com/api/v1/admin/news/latest/delete/<image_id>]()
+  + url: DELETE [https://mmust-jowa.onrender.com/api/v1/admin/news/latest/delete/< id>]()
   +
     ```python
     headers:

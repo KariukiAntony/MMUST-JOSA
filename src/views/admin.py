@@ -11,7 +11,7 @@ admin = Blueprint("admin", __name__,)
 
 
 """ An endpoint to get the total number of blogs owned by admin """
-@admin.route("/totalblogs")
+@admin.route("/total/blogs")
 @cross_origin()
 @jwt_required()
 def get_admin_total_blogs():
@@ -19,7 +19,7 @@ def get_admin_total_blogs():
     author = User.query.filter_by(id=user_id).first()
     author_first_name = author.first_name
     try:
-        res = requests.get(f"https://flask-test-jtnd.onrender.com/api/v1/blogs/authorblogs/{author_first_name}")
+        res = requests.get(f"http://127.0.0.1:5000/api/v1/user/authorblogs/{author_first_name}")
         if res.status_code == 200:
             total_blogs = res.json()[0]
             return str(total_blogs), 200
@@ -30,6 +30,16 @@ def get_admin_total_blogs():
           logging.error(f"An error has occured: {e}")
     
     return author_first_name, 200
+
+""" An endpoint to get the total number of comments owned by admin """
+@admin.route("/total/comments")
+@cross_origin()
+@jwt_required()
+def get_admin_total_comments():
+    user_id = get_jwt_identity()
+    total_comments = get_news_and_comments(user_id=user_id)[1]
+    
+    return str(total_comments), 200
 
 
 
@@ -42,20 +52,23 @@ def get_latest_five_news_blogs():
     latest_blogs = News.query.filter_by(author_id=user_id).order_by(News.id.desc()).paginate(page=1, per_page=5, error_out=False)
     serialized = []
     for blog in latest_blogs:
-            serialized.append({
-                    "image_id": blog.image_id,
-                    "title": blog.title,
-                    "published_on": blog.published_on
-            })
+        total_comments = len(blog.comments)
+        serialized.append({
+                "id": blog.id,
+                "image_id": blog.image_id,
+                "title": blog.title,
+                "published_on": blog.published_on,
+                "total_comments": total_comments
+        })
     
     return serialized
 
 """ An endpoint to update the blogs in the admin dashboard """
-@admin.route("/news/latest/update/<string:image_id>", methods = ["PUT"])
+@admin.route("/news/latest/update/<int:id>", methods = ["PUT"])
 @cross_origin()
-def update_blog_in_latest_news(image_id):
+def update_blog_in_latest_news(id):
       data = request.get_json()
-      blog = News.query.filter_by(image_id=image_id).first()
+      blog = News.query.filter_by(id=id).first()
       if blog:
             blog.title = data.get("title")
             blog.slug = data.get("slug")
@@ -63,20 +76,20 @@ def update_blog_in_latest_news(image_id):
             db.session.commit()
             return make_response(jsonify({"success": "Blog updated successfully"})), 202
       
-      return make_response(jsonify({"error": f"News blog with image_id {image_id} was not found!"})), 404
+      return make_response(jsonify({"error": f"News blog with id {id} was not found!"})), 404
 
 
 """ An endpoint to delete the five latest blogs in admin homepage """
-@admin.route("/news/latest/delete/<string:image_id>", methods=["DELETE"])
+@admin.route("/news/latest/delete/<int:id>", methods=["DELETE"])
 @cross_origin()
-def delete_blog_in_latest(image_id):
-      blog = News.query.filter_by(image_id=image_id).first()
+def delete_blog_in_latest(id):
+      blog = News.query.filter_by(id=id).first()
       if blog:
             db.session.delete(blog)
             db.session.commit()
             return jsonify({"success": "Image deleted succesfully"}), 204
       
-      return {"error": f"Image with id {image_id} not found"}, 404
+      return {"error": f"Image with id {id} not found"}, 404
 
 
 """ An endpoint to get all the News blogs written by admin """
@@ -239,6 +252,17 @@ def delete_blog(category, image_id) -> bool:
         return True
 
     return False
+
+""" A function to get the number of news post and associated comments """
+def get_news_and_comments(user_id: int) -> str:
+    news_blogs = News.query.filter_by(author_id= user_id).all()
+    total_news = len(news_blogs)
+    comments = 0
+    for blog in news_blogs:
+         comments += len(blog.comments)
+  
+    return [total_news, comments]
+
         
           
             
