@@ -8,10 +8,10 @@ migrate = Migrate()
 
 class User(db.Model):
           id = db.Column(db.Integer, primary_key = True, index=True)
-          first_name = db.Column(db.String(20), nullable=False)
-          last_name = db.Column(db.String(20), nullable=False)
-          email = db.Column(db.String(30), unique=True)
-          password = db.Column(db.String(30), nullable=False)
+          first_name = db.Column(db.String(300), nullable=False)
+          last_name = db.Column(db.String(300), nullable=False)
+          email = db.Column(db.String(500), unique=True)
+          password = db.Column(db.String(3000), nullable=False)
           date_created = db.Column(db.DateTime(timezone=True), default=datetime.now)
           news = db.relationship("News", backref="user", passive_deletes=True)
           business = db.relationship("Business", backref="user", passive_deletes=True)
@@ -31,9 +31,9 @@ class User(db.Model):
 
 class News(db.Model):
         id = db.Column(db.Integer, primary_key=True, index=True)
-        title = db.Column(db.String(50), nullable=False)
-        slug = db.Column(db.String(100), nullable=False)
-        image_id = db.Column(db.String(100), nullable=False, unique=True)
+        title = db.Column(db.String(500), nullable=False)
+        slug = db.Column(db.String(10000), nullable=False)
+        image_id = db.Column(db.String(10000), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
         date_created = db.Column(db.DateTime(timezone=True), default=datetime.now)
         published_on = db.Column(db.DateTime(timezone=True), default = datetime.now, onupdate=datetime.now)
@@ -49,9 +49,9 @@ class NewsComments(db.Model):
         
 class Business(db.Model):
         id = db.Column(db.Integer, primary_key=True, index=True)
-        title = db.Column(db.String(100), nullable=False)
-        slug = db.Column(db.String(100), nullable=False)
-        image_id = db.Column(db.String(100), nullable=False, unique=True)
+        title = db.Column(db.String(500), nullable=False)
+        slug = db.Column(db.String(1000), nullable=False)
+        image_id = db.Column(db.String(1000), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
         date_created = db.Column(db.DateTime, default=datetime.now)
         published_on = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
@@ -68,9 +68,9 @@ class BusinessComments(db.Model):
 
 class Sports(db.Model):
         id = db.Column(db.Integer, primary_key=True, index=True)
-        title = db.Column(db.String(100), nullable=False)
-        slug = db.Column(db.String(100), nullable=False)
-        image_id = db.Column(db.String(100), nullable=False, unique=True)
+        title = db.Column(db.String(500), nullable=False)
+        slug = db.Column(db.String(1000), nullable=False)
+        image_id = db.Column(db.String(1000), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
         date_created = db.Column(db.DateTime, default=datetime.now)
         published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now)
@@ -87,9 +87,9 @@ class SportsComments(db.Model):
      
 class Entertainment(db.Model):
         id = db.Column(db.Integer, primary_key=True, index=True)
-        title = db.Column(db.String(100), nullable=False)
-        slug = db.Column(db.String(100), nullable=False)
-        image_id = db.Column(db.String(100), nullable=False, unique=True)
+        title = db.Column(db.String(1000), nullable=False)
+        slug = db.Column(db.String(1000), nullable=False)
+        image_id = db.Column(db.String(1000), nullable=False, unique=True)
         body = db.Column(db.Text, nullable=False)
         date_created = db.Column(db.DateTime, default=datetime.now)
         published_on = db.Column(db.DateTime, default = datetime.now, onupdate=datetime.now)
