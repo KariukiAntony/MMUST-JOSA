@@ -16,20 +16,11 @@ admin = Blueprint("admin", __name__,)
 @jwt_required()
 def get_admin_total_blogs():
     user_id = get_jwt_identity()
-    author = User.query.filter_by(id=user_id).first()
-    author_fullname = f"{author.first_name} {author.last_name}"
-    try:
-        res = requests.get(f"https://mmust-jowa.onrender.com/api/v1/user/authorblogs/{author_fullname}")
-        if res.status_code == 200:
-            total_blogs = res.json()[0]
-            return str(total_blogs), 200
-
-        logging.error(f"failed to send the request with status code: {res.status_code}")
-
-    except Exception as e:
-          logging.error(f"An error has occured: {e}")
+    total_blogs = get_total_number_of_post(user_id=user_id)
+    if total_blogs:
+        return total_blogs, 200
     
-    return author_fullname, 200
+    return None, 200
 
 """ An endpoint to get the total number of comments owned by admin """
 @admin.route("/total/comments")
@@ -425,7 +416,14 @@ def get_entertainment_and_comments(user_id: int) -> str:
     return [total_news, comments]
     
 
-        
+""" A fucntion  to get the total number of post owner by user """
+def get_total_number_of_post(user_id: int)-> str:
+    news_blogs = get_news_and_comments(user_id=user_id)[0]
+    business_blogs = get_business_and_comments(user_id=user_id)[0]
+    sports_blogs = get_sports_and_comments(user_id=user_id)[0]
+    enta_blogs = get_entertainment_and_comments(user_id= user_id)[0]
+    total_blogs = news_blogs+business_blogs+sports_blogs+enta_blogs
+    return str(total_blogs)
           
             
 
