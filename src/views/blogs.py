@@ -220,7 +220,7 @@ def get_blog_info (category, id):
                 "image": data.image_id,
                 "body": data.body,
                 "author": f"{author.first_name} {author.last_name}",
-                "published on": data.published_on
+                "published_on": data.published_on
                  }
                  )
         else:
