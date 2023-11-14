@@ -17,9 +17,9 @@ admin = Blueprint("admin", __name__,)
 def get_admin_total_blogs():
     user_id = get_jwt_identity()
     author = User.query.filter_by(id=user_id).first()
-    author_first_name = author.first_name
+    author_fullname = f"{author.first_name} {author.last_name}"
     try:
-        res = requests.get(f"https://mmust-jowa.onrender.com/api/v1/user/authorblogs/{author_first_name}")
+        res = requests.get(f"http://127.0.0.1:5000/api/v1/user/authorblogs/{author_fullname}")
         if res.status_code == 200:
             total_blogs = res.json()[0]
             return str(total_blogs), 200
@@ -29,7 +29,7 @@ def get_admin_total_blogs():
     except Exception as e:
           logging.error(f"An error has occured: {e}")
     
-    return author_first_name, 200
+    return author_fullname, 200
 
 """ An endpoint to get the total number of comments owned by admin """
 @admin.route("/total/comments")
