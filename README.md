@@ -191,6 +191,24 @@ User is given an access and a refresh token, while The status_code of the respon
     }
     ```
      The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that the access token is valid.
+       ### Total Number of News Post 
+
+       + url: GET [https://mmust-jowa.onrender.com/api/v1/admin/total/news]()
+       +
+          ```python
+          headers:
+            content-type: application/json
+            Authorization: Bearer <token>
+          ```
+          +
+            ```python
+
+            Example of a response  body.
+            10
+              ```
+          - where 10 is the total number of comments.
+
+          The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that all the access token is valid.
 
 ## All Business Blogs 
 #### The admin is able to get all busness blogs associated with him/her.

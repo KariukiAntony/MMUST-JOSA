@@ -37,7 +37,12 @@ def get_admin_total_blogs():
 @jwt_required()
 def get_admin_total_comments():
     user_id = get_jwt_identity()
-    total_comments = get_news_and_comments(user_id=user_id)[1]
+    news_comments = get_news_and_comments(user_id=user_id)[1]
+    business_comments = get_business_and_comments(user_id=user_id)[1]
+    sports_comments = get_sports_and_comments(user_id=user_id)[1]
+    entertainment_comments = get_entertainment_and_comments(user_id=user_id)[1]
+    total_comments = news_comments + business_comments+\
+    sports_comments + entertainment_comments
     
     return str(total_comments), 200
 
@@ -92,14 +97,38 @@ def delete_blog_in_latest(id):
       return {"error": f"Image with id {id} not found"}, 404
 
 
+""" An endpoint to get the total number of news blogs owned by author """
+@admin.route("/total/news")
+@cross_origin()
+@jwt_required()
+def get_admin_total_news_blogs():
+    user_id = get_jwt_identity()
+    total_news = get_news_and_comments(user_id=user_id)[0]
+    
+    return str(total_news), 200
+
+""" An endpoint to get the total number of comments associated with all news blogs """
+@admin.route("/total/news/comments")
+@cross_origin()
+@jwt_required()
+def get_admin_total_news_comments():
+    user_id = get_jwt_identity()
+    total_news = get_news_and_comments(user_id=user_id)[1]
+    
+    return str(total_news), 200
+
+
+
 """ An endpoint to get all the News blogs written by admin """
 @admin.route("/blogs/news")
 @cross_origin()
 @jwt_required()
 def get_all_user_news__blogs():
     user_id = get_jwt_identity()
-    user_news_blogs =  News.query.filter_by(author_id=user_id).order_by(News.id.desc()).all()
-    seliarized_blogs = seliarize_user_news__blogs(user_blogs=user_news_blogs, comments_model=NewsComments)
+    user_news_blogs =  News.query.filter_by(author_id=user_id).\
+        order_by(News.id.desc()).all()
+    seliarized_blogs = seliarize_user_news__blogs\
+        (user_blogs=user_news_blogs, comments_model=NewsComments)
     return seliarized_blogs, 200
 
 
@@ -109,8 +138,10 @@ def get_all_user_news__blogs():
 @jwt_required()
 def get_all_user_business_blogs():
     user_id = get_jwt_identity()
-    user_news_blogs =  Business.query.filter_by(author_id=user_id).order_by(Business.id.desc()).all()
-    seliarized_blogs = seliarize_user_news__blogs(user_blogs=user_news_blogs, comments_model=BusinessComments)
+    user_news_blogs =  Business.query.filter_by(author_id=user_id).\
+        order_by(Business.id.desc()).all()
+    seliarized_blogs = seliarize_user_news__blogs\
+        (user_blogs=user_news_blogs, comments_model=BusinessComments)
     return seliarized_blogs, 200
 
 
@@ -120,8 +151,10 @@ def get_all_user_business_blogs():
 @jwt_required()
 def get_all_user_sports_blogs():
     user_id = get_jwt_identity()
-    user_news_blogs =  Sports.query.filter_by(author_id=user_id).order_by(Sports.id.desc()).all()
-    seliarized_blogs = seliarize_user_news__blogs(user_blogs=user_news_blogs, comments_model=SportsComments)
+    user_news_blogs =  Sports.query.filter_by(author_id=user_id).\
+        order_by(Sports.id.desc()).all()
+    seliarized_blogs = seliarize_user_news__blogs\
+        (user_blogs=user_news_blogs, comments_model=SportsComments)
     return seliarized_blogs, 200
 
 
@@ -131,8 +164,10 @@ def get_all_user_sports_blogs():
 @jwt_required()
 def get_all_user_entertainment_blogs():
     user_id = get_jwt_identity()
-    user_news_blogs =  Entertainment.query.filter_by(author_id=user_id).order_by(Entertainment.id.desc()).all()
-    seliarized_blogs = seliarize_user_news__blogs(user_blogs=user_news_blogs, comments_model=EntertainmentComments)
+    user_news_blogs =  Entertainment.query.filter_by\
+        (author_id=user_id).order_by(Entertainment.id.desc()).all()
+    seliarized_blogs = seliarize_user_news__blogs\
+        (user_blogs=user_news_blogs, comments_model=EntertainmentComments)
     return seliarized_blogs, 200
 
 
@@ -141,30 +176,34 @@ def get_all_user_entertainment_blogs():
 @cross_origin() 
 @jwt_required()
 def create_a_new_blog():
-        if not request.content_type == "application/json":
-              return jsonify({"failed": "content_type must be application/json"}), 400
-        user_id = get_jwt_identity()
-        data = request.get_json()
-        print(data)
-        if validate_blog_data(data):
-                if data["category"] == "News":
-                    add_new_blog_data(News, data, user_id)
-                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
-                
-                elif data["category"] == "Business":
-                    add_new_blog_data(Business, data, user_id)
-                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
-                
-                elif data["category"] == "Sports":
-                    add_new_blog_data(Sports, data, user_id)
-                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
-                
-                elif data["category"] == "Entertainment":
-                    add_new_blog_data(Entertainment, data, user_id)
-                    return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
-
+    if not request.content_type == "application/json":
+            return jsonify({"failed": "content_type must be application/json"}), 400
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    print(data)
+    if validate_blog_data(data):
+        if data["category"] == "News":
+            add_new_blog_data(News, data, user_id)
+            return jsonify({"success": f"A new {data['category']}\
+                    Blog created successfully"}), 201
         
-        return jsonify({"failed": "All fields are required"}), 400
+        elif data["category"] == "Business":
+            add_new_blog_data(Business, data, user_id)
+            return jsonify({"success": f"A new {data['category']}\
+                    Blog created successfully"}), 201
+        
+        elif data["category"] == "Sports":
+            add_new_blog_data(Sports, data, user_id)
+            return jsonify({"success": f"A new {data['category']}\
+                    Blog created successfully"}), 201
+        
+        elif data["category"] == "Entertainment":
+            add_new_blog_data(Entertainment, data, user_id)
+            return jsonify({"success": f"A new {data['category']} \
+                Blog created successfully"}), 201
+
+    
+    return jsonify({"failed": "All fields are required"}), 400
 
 """ An endpoint to delete a blog based on the category """
 @admin.route("/blogs/delete/<string:category>/<string:image_id>", methods=["DELETE"])
@@ -262,6 +301,37 @@ def get_news_and_comments(user_id: int) -> str:
          comments += len(blog.comments)
   
     return [total_news, comments]
+
+""" A function to get the number of business post and associated comments """
+def get_business_and_comments(user_id: int) -> str:
+    business_blogs = Business.query.filter_by(author_id= user_id).all()
+    total_business = len(business_blogs)
+    comments = 0
+    for blog in business_blogs:
+         comments += len(blog.comment)
+  
+    return [total_business, comments]
+
+""" A function to get the number of sports post and associated comments """
+def get_sports_and_comments(user_id: int) -> str:
+    sports_blogs = Sports.query.filter_by(author_id= user_id).all()
+    total_sports = len(sports_blogs)
+    comments = 0
+    for blog in sports_blogs:
+         comments += len(blog.comment)
+  
+    return [total_sports, comments]
+
+""" A function to get the number of entertainment post and associated comments """
+def get_entertainment_and_comments(user_id: int) -> str:
+    news_blogs = Entertainment.query.filter_by(author_id= user_id).all()
+    total_news = len(news_blogs)
+    comments = 0
+    for blog in news_blogs:
+         comments += len(blog.comment)
+  
+    return [total_news, comments]
+    
 
         
           
