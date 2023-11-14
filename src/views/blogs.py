@@ -199,10 +199,11 @@ def get_all_blogs_with_category(model)-> list:
         for blog in all_blogs:
                 serialized.append(
                         {
-                                "title": blog.title,
-                                "slug": blog.slug,
-                                "image_id": blog.image_id,
-                                "published_on": blog.published_on,
+                          "id": blog.id,
+                          "title": blog.title,
+                          "slug": blog.slug,
+                          "image_id": blog.image_id,
+                          "published_on": blog.published_on,
                         }
                 )
         

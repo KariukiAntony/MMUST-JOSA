@@ -611,14 +611,15 @@ A limited number of blogs from each category are displayed here . Blogs are disp
  ## Single Blog
   when a user clicks on a single blog, the frontend sends a request with the image_id related to the blog and the category of the blog to the backed where the backend returns all the info related to the blog. on the url below, replace CATEGORY with the the blog category ie Business and imaged_id with the image id.
 
-  + url: GET  [https://mmust-jowa.onrender.com/api/v1/user/category/image_id]()
+  + url: GET  [https://mmust-jowa.onrender.com/api/v1/user/category/<id>]()
+   + where the category is either News, Business and the id is the image
 
 
     
   +
     ```python
     Response Body of a single blog in the array:
-
+        id: string
         title: string
         slug: string 
         author: string 
