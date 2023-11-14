@@ -131,6 +131,25 @@ def get_all_user_news__blogs():
         (user_blogs=user_news_blogs, comments_model=NewsComments)
     return seliarized_blogs, 200
 
+""" An endpoint to get the total number of business blogs owned by author """
+@admin.route("/total/business")
+@cross_origin()
+@jwt_required()
+def get_admin_total_business_blogs():
+    user_id = get_jwt_identity()
+    total_business = get_business_and_comments(user_id=user_id)[0]
+    
+    return str(total_business), 200
+
+""" An endpoint to get the total number of comments associated with all business blogs """
+@admin.route("/total/business/comments")
+@cross_origin()
+@jwt_required()
+def get_admin_total_business_comments():
+    user_id = get_jwt_identity()
+    total_business = get_business_and_comments(user_id=user_id)[1]
+    
+    return str(total_business), 200
 
 """ An endpoint to get all the Business blogs written by admin """
 @admin.route("/blogs/business")

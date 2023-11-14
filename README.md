@@ -206,7 +206,25 @@ User is given an access and a refresh token, while The status_code of the respon
             Example of a response  body.
             10
               ```
-          - where 10 is the total number of comments.
+          - where 10 is the total number of news post.
+
+          The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that all the access token is valid.
+       ### Total Number of comments associated with news posts 
+
+       + url: GET [https://mmust-jowa.onrender.com/api/v1/admin/total/news/comments]()
+       +
+          ```python
+          headers:
+            content-type: application/json
+            Authorization: Bearer <token>
+          ```
+          +
+            ```python
+
+            Example of a response  body.
+            10
+              ```
+          - where 10 is the total number of comments post.
 
           The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that all the access token is valid.
 
@@ -245,6 +263,44 @@ User is given an access and a refresh token, while The status_code of the respon
     }
     ```
      The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that the access token is valid.
+
+      ### Total Number of Business Post 
+
+       + url: GET [https://mmust-jowa.onrender.com/api/v1/admin/total/business]()
+       +
+          ```python
+          headers:
+            content-type: application/json
+            Authorization: Bearer <token>
+          ```
+          +
+            ```python
+
+            Example of a response  body.
+            10
+              ```
+          - where 10 is the total number of news post.
+
+          The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that all the access token is valid.
+       ### Total Number of comments associated with news posts 
+
+       + url: GET [https://mmust-jowa.onrender.com/api/v1/admin/total/business/comments]()
+       +
+          ```python
+          headers:
+            content-type: application/json
+            Authorization: Bearer <token>
+          ```
+          +
+            ```python
+
+            Example of a response  body.
+            10
+              ```
+          - where 10 is the total number of comments post.
+
+          The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that all the access token is valid.
+
 ## All Sports Blogs 
 #### The admin is able to get all sports blogs associated with him/her.
   + url:  GET  [https://mmust-jowa.onrender.com/api/v1/admin/blogs/sports]()
@@ -256,6 +312,44 @@ User is given an access and a refresh token, while The status_code of the respon
     ```
      The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that the access token is valid.
 
+      ### Total Number of Sports Post 
+
+       + url: GET [https://mmust-jowa.onrender.com/api/v1/admin/total/sports]()
+       +
+          ```python
+          headers:
+            content-type: application/json
+            Authorization: Bearer <token>
+          ```
+          +
+            ```python
+
+            Example of a response  body.
+            10
+              ```
+          - where 10 is the total number of news post.
+
+          The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that all the access token is valid.
+       ### Total Number of comments associated with sports posts 
+
+       + url: GET [https://mmust-jowa.onrender.com/api/v1/admin/total/sports/comments]()
+       +
+          ```python
+          headers:
+            content-type: application/json
+            Authorization: Bearer <token>
+          ```
+          +
+            ```python
+
+            Example of a response  body.
+            10
+              ```
+          - where 10 is the total number of comments post.
+
+          The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that all the access token is valid.
+
+
 ## All Entertainment  Blogs 
 #### The admin is able to get all entertainment  blogs associated with him/her.
   + url:  GET  [https://mmust-jowa.onrender.com/api/v1/admin/blogs/entertainment]()
@@ -266,6 +360,43 @@ User is given an access and a refresh token, while The status_code of the respon
       Authorization: Bearer <token>
     ```
      The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that the access token is valid.
+
+      ### Total Number of Entertainment Post 
+
+       + url: GET [https://mmust-jowa.onrender.com/api/v1/admin/total/entertainment]()
+       +
+          ```python
+          headers:
+            content-type: application/json
+            Authorization: Bearer <token>
+          ```
+          +
+            ```python
+
+            Example of a response  body.
+            10
+              ```
+          - where 10 is the total number of news post.
+
+          The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that all the access token is valid.
+       ### Total Number of comments associated with entertainment posts 
+
+       + url: GET [https://mmust-jowa.onrender.com/api/v1/admin/total/entertainment/comments]()
+       +
+          ```python
+          headers:
+            content-type: application/json
+            Authorization: Bearer <token>
+          ```
+          +
+            ```python
+
+            Example of a response  body.
+            10
+              ```
+          - where 10 is the total number of comments post.
+
+          The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that all the access token is valid.
 ## Create Blogs 
 #### After being logged into the system, admin can be able to create a blog.
   + url:  POST  [https://mmust-jowa.onrender.com/api/v1/admin/createblog]()
@@ -295,6 +426,8 @@ User is given an access and a refresh token, while The status_code of the respon
        }
     ```
      The status_code of the response == 201 if the blog was created successfully else a bad request error(400) is thrown. user should ensure that all the fields above are included.
+
+     
 ## Delete Blogs 
 #### Admin has the previledge to delete any of his/her blogs
   + url: DELETE [https://mmust-jowa.onrender.com/api/v1/admin/blogs/delete/category/<image_id>]()
