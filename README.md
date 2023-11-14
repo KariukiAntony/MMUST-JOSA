@@ -485,18 +485,24 @@ A limited number of blogs from each category are displayed here . Blogs are disp
     Exampe of a Response Body:
 
      News:
-        title: string
-        slug: string 
-        author: string 
-        image_id: string 
-        published_on: string
+        {
+      "author": "Antony Kariuki",
+      "id": 7,
+      "image_id": "https://media.istockphoto.com/id/1166613720/photo/sunflower-in-full-bloom-with-blue-sky.webp?b=1&s=170667a&w=0&k=20&c=kAbs2YK8la_t5kRip_-tFyDroAw4QsKsMKeit9IGA4o=",
+      "published_on": "Tue, 14 Nov 2023 07:34:44 GMT",
+      "slug": "All eyes on EPRA ahead of monthly fuel price review ",
+      "title": "All eyes on EPRA ahead of monthly fuel price review "
+    }
 
      Business:
-       title: string
-       slug: string 
-       author: string 
-       image_id: string 
-       published_on: string
+     {
+      "author": "Antony Kariuki",
+      "id": 7,
+      "image_id": "https://media.istockphoto.com/id/1166613720/photo/sunflower-in-full-bloom-with-blue-sky.webp?b=1&s=170667a&w=0&k=20&c=kAbs2YK8la_t5kRip_-tFyDroAw4QsKsMKeit9IGA4o=",
+      "published_on": "Tue, 14 Nov 2023 07:34:44 GMT",
+      "slug": "All eyes on EPRA ahead of monthly fuel price review ",
+      "title": "All eyes on EPRA ahead of monthly fuel price review "
+    }
     ```
   + Note: Only three blogs per category are returned in the response
 

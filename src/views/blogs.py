@@ -72,33 +72,33 @@ def get_all_entertainment_blogs():
         return all_entertainment, 200
 # best code 
 """  An endpoint to get the data associated with and image_id presented  """
-@blogs.route('/<string:category>/<string:image_id>')
+@blogs.route('/<string:category>/<int:id>')
 @cross_origin() 
-def get_all_info(category, image_id): 
-        error_message = {"error": f"{category} Image with id {image_id} does not exist"}        
+def get_all_info(category, id): 
+        error_message = {"error": f"{category} Image with id {id} does not exist"}        
         if category == "News":
-                blog_data = get_blog_info(category=News, image_id=image_id)
+                blog_data = get_blog_info(category=News, id=id)
                 if blog_data:
                        return blog_data, 200
                 
                 return jsonify(error_message), 404
         
         elif category == "Business":
-                blog_data = get_blog_info(category=Business, image_id=image_id)
+                blog_data = get_blog_info(category=Business, id=id)
                 if blog_data:
                        return blog_data, 200
                 
                 return jsonify(error_message), 404
         
         elif category == "Sports":
-                blog_data = get_blog_info(category=Sports, image_id=image_id)
+                blog_data = get_blog_info(category=Sports, id=id)
                 if blog_data:
                         return blog_data, 200
                 
                 return jsonify(error_message), 404
                 
         elif category == "Entertainment":
-                blog_data = get_blog_info(category=Entertainment, image_id=image_id)
+                blog_data = get_blog_info(category=Entertainment, id=id)
                 if blog_data:
                         return blog_data, 200
                 
@@ -129,7 +129,7 @@ def get_all_user_blogs(fullname):
 
 
 """ An endpoint to create comment associated with a blog """
-@blogs.route('/comment/<string:category>/<string:image_id>', methods=['POST'])
+@blogs.route('/comment/<string:category>/<string:id>', methods=['POST'])
 @cross_origin() 
 def create_comment(category, image_id):
         success_message = f"new {category} comment added successfully"
@@ -173,7 +173,8 @@ def get_brief_home_news(model, page, per_page):
         serialized = []
         for blog in blogs:
                 serialized.append({
-                        "image_id": blog.image_id,
+                       "id": blog.id,
+                        "image": blog.image_id,
                         "author": get_the_user_based_on_author_id(blog.author_id),
                         "title": blog.title,
                         "slug": blog.slug,
@@ -208,14 +209,14 @@ def get_all_blogs_with_category(model)-> list:
         return serialized
 
 """ A function to get the all the data of an blog  """
-def get_blog_info (category, image_id):
-        data = category.query.filter_by(image_id=image_id).first()
+def get_blog_info (category, id):
+        data = category.query.filter_by(id=id).first()
         if data:
            author = User.query.filter_by(id=data.author_id).first()
            return jsonify({
                 "title": data.title,
                 "slug": data.slug,
-                "image_id": data.image_id,
+                "image": data.image_id,
                 "body": data.body,
                 "author": f"{author.first_name} {author.last_name}",
                 "published on": data.published_on
