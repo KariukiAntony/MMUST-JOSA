@@ -196,6 +196,26 @@ def get_all_user_sports_blogs():
         (user_blogs=user_news_blogs, comments_model=SportsComments)
     return seliarized_blogs, 200
 
+""" An endpoint to get the total number of sports blogs owned by author """
+@admin.route("/total/entertainment")
+@cross_origin()
+@jwt_required()
+def get_admin_total_entertainment_blogs():
+    user_id = get_jwt_identity()
+    total_entertainment = get_entertainment_and_comments(user_id=user_id)[0]
+    
+    return str(total_entertainment), 200
+
+""" An endpoint to get the total number of comments associated with all business blogs """
+@admin.route("/total/entertainment/comments")
+@cross_origin()
+@jwt_required()
+def get_admin_total_entertainment_comments():
+    user_id = get_jwt_identity()
+    total_entertainment = get_entertainment_and_comments(user_id=user_id)[1]
+    
+    return str(total_entertainment), 200
+
 
 """ An endpoint to get all the Sports blogs written by admin """
 @admin.route("/blogs/entertainment")
