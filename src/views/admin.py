@@ -163,6 +163,26 @@ def get_all_user_business_blogs():
         (user_blogs=user_news_blogs, comments_model=BusinessComments)
     return seliarized_blogs, 200
 
+""" An endpoint to get the total number of sports blogs owned by author """
+@admin.route("/total/sports")
+@cross_origin()
+@jwt_required()
+def get_admin_total_sports_blogs():
+    user_id = get_jwt_identity()
+    total_sports = get_sports_and_comments(user_id=user_id)[0]
+    
+    return str(total_sports), 200
+
+""" An endpoint to get the total number of comments associated with all business blogs """
+@admin.route("/total/sports/comments")
+@cross_origin()
+@jwt_required()
+def get_admin_total_sports_comments():
+    user_id = get_jwt_identity()
+    total_sports = get_sports_and_comments(user_id=user_id)[1]
+    
+    return str(total_sports), 200
+
 
 """ An endpoint to get all the Sports blogs written by admin """
 @admin.route("/blogs/sports")
@@ -291,6 +311,7 @@ def seliarize_user_news__blogs(user_blogs, comments_model) -> list:
                 }
             )
         seliarized.append({
+             "id": blog.id,
              "title": blog.title,
              "slug": blog.slug,
              "image_id": blog.image_id,
