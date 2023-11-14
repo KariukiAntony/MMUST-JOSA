@@ -68,20 +68,39 @@ def get_latest_five_news_blogs():
     
     return serialized
 
-""" An endpoint to update the blogs in the admin dashboard """
-@admin.route("/news/latest/update/<int:id>", methods = ["PUT"])
+""" An endpoint to update the blogs based on the category dashboard """
+@admin.route("/blogs/update/<string:category>/<int:id>", methods = ["PUT"])
 @cross_origin()
-def update_blog_in_latest_news(id):
-      data = request.get_json()
-      blog = News.query.filter_by(id=id).first()
-      if blog:
-            blog.title = data.get("title")
-            blog.slug = data.get("slug")
-            blog.body = data.get("body")
-            db.session.commit()
-            return make_response(jsonify({"success": "Blog updated successfully"})), 202
-      
-      return make_response(jsonify({"error": f"News blog with id {id} was not found!"})), 404
+def update_blog_in_latest_news(category, id):
+    success_msg = "Blog updated successfully"
+    error_msg = "invalid id passed"
+    data = request.get_json()
+    if category == "News":
+        if update_blog(category=News, id=id, data=data):
+           return make_response(jsonify({"success": success_msg})), 202
+        
+        return make_response(jsonify({"error": error_msg})), 404
+
+    elif category == "Business":
+        if update_blog(category=Business, id=id, data=data):
+           return make_response(jsonify({"success": success_msg})), 202
+        
+        return make_response(jsonify({"error": error_msg})), 404
+
+    elif category == "Sports":
+        if update_blog(category=Sports, id=id, data=data):
+           return make_response(jsonify({"success": success_msg})), 202
+        
+        return make_response(jsonify({"error": error_msg})), 404
+
+    elif category == "Entertainment":
+        if update_blog(category=Entertainment, id=id, data=data):
+           return make_response(jsonify({"success": success_msg})), 202
+        
+        return make_response(jsonify({"error": error_msg})), 404
+
+    
+    return make_response(jsonify({"error":"Invalid category passed"})), 400
 
 
 """ An endpoint to delete the five latest blogs in admin homepage """
@@ -265,28 +284,28 @@ def create_a_new_blog():
     return jsonify({"failed": "All fields are required"}), 400
 
 """ An endpoint to delete a blog based on the category """
-@admin.route("/blogs/delete/<string:category>/<string:image_id>", methods=["DELETE"])
-def delete_blog(category, image_id):
+@admin.route("/blogs/delete/<string:category>/<int:id>", methods=["DELETE"])
+def delete_blog(category, id):
     if category == "News":
-        if delete_blog(category=News, image_id=image_id):
+        if delete_blog(category=News, id=id):
              return " ", 204
 
         return jsonify({"failed": "double check the image_id"}), 404
 
     elif category == "Business":
-        if delete_blog(category=Business, image_id=image_id):
+        if delete_blog(category=Business, id=id):
              return " ", 204
 
         return jsonify({"failed": "double check the image_id"}), 404
     
     elif category == "Sports":
-        if delete_blog(category=Sports, image_id=image_id):
+        if delete_blog(category=Sports, id=id):
              return " ", 204
 
         return jsonify({"failed": "double check the image_id"}), 404
 
     elif category == "Entertainment":
-        if delete_blog(category=Entertainment, image_id=image_id):
+        if delete_blog(category=Entertainment, id=id):
              return " ", 204
 
         return jsonify({"failed": "double check the image_id"}), 404
@@ -343,10 +362,23 @@ def seliarize_user_news__blogs(user_blogs, comments_model) -> list:
     return seliarized
 
 """ A function to delete a blog """
-def delete_blog(category, image_id) -> bool:
-    data = category.query.filter_by(image_id=image_id).first()
+def delete_blog(category, id) -> bool:
+    data = category.query.filter_by(id=id).first()
     if data:
         db.session.delete(data)
+        db.session.commit()
+        return True
+
+    return False
+
+""" A function to update  a blog """
+def update_blog(category, id, data) -> bool:
+    data = category.query.filter_by(id=id).first()
+    if data:
+        data.title = data.get("title")
+        data.slug = data.get("slug")
+        data.body = data.get("body")
+        data.image_id = data.image_id
         db.session.commit()
         return True
 
