@@ -129,9 +129,9 @@ def get_all_user_blogs(fullname):
 
 
 """ An endpoint to create comment associated with a blog """
-@blogs.route('/comment/<string:category>/<string:id>', methods=['POST'])
+@blogs.route('/comment/<string:category>/<int:id>', methods=['POST'])
 @cross_origin() 
-def create_comment(category, image_id):
+def create_comment(category, id):
         success_message = f"new {category} comment added successfully"
         error_message = f"Failed to create a new comment. check the image id provided"
         data = request.get_json()
@@ -139,25 +139,25 @@ def create_comment(category, image_id):
               return jsonify({"Error": "content required"}), 400
         
         elif category == "News":
-               if create_comment(category=NewsComments,category1=News, image_id=image_id, data=data):
+               if create_comment(category=NewsComments,category1=News, id=id, data=data):
                       return jsonify({"success": success_message}), 201
                
                return jsonify({"error": error_message}), 404
         
         elif category == "Business":
-               if create_comment(category=BusinessComments, category1=Business, image_id=image_id, data=data):
+               if create_comment(category=BusinessComments, category1=Business, id=id, data=data):
                       return jsonify({"success": success_message}), 201
                
                return jsonify({"error": error_message}), 404
         
         elif category == "Sports":
-               if create_comment(category=SportsComments,category1=Sports, image_id=image_id, data=data):
+               if create_comment(category=SportsComments,category1=Sports, id=id, data=data):
                       return jsonify({"success": success_message}), 201
                
                return jsonify({"error": error_message}), 404
         
         elif category == "Entertainment":
-               if create_comment(category=EntertainmentComments,category1=Entertainment, image_id=image_id, data=data):
+               if create_comment(category=EntertainmentComments,category1=Entertainment, id=id, data=data):
                       return jsonify({"success": success_message}), 201
                
                return jsonify({"error": error_message}), 404
@@ -240,10 +240,10 @@ def get_user_blogs_based_on_category(blogs):
 
 
 """ A function to create a comment"""
-def create_comment (category, category1, image_id, data):
+def create_comment (category, category1, id, data):
         content = data["content"]
         is_anonymous = data.get("is_anonymous", True)
-        blog = category1.query.filter_by(image_id=image_id).first()
+        blog = category1.query.filter_by(id=id).first()
         if blog:
            new_comment = category(content=content, is_anonymous = is_anonymous , blog_id= blog.id)
            db.session.add(new_comment)
