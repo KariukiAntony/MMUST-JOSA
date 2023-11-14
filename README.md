@@ -282,7 +282,7 @@ User is given an access and a refresh token, while The status_code of the respon
           - where 10 is the total number of news post.
 
           The status_code of the response == 200 if the get request was successful else Unauthorized error (401) is thrown. user should ensure that all the access token is valid.
-       ### Total Number of comments associated with news posts 
+       ### Total Number of comments associated with business posts 
 
        + url: GET [https://mmust-jowa.onrender.com/api/v1/admin/total/business/comments]()
        +
@@ -427,12 +427,43 @@ User is given an access and a refresh token, while The status_code of the respon
     ```
      The status_code of the response == 201 if the blog was created successfully else a bad request error(400) is thrown. user should ensure that all the fields above are included.
 
+## Update Blogs 
+#### After being logged into the system, admin can be able to update a blog.
+  + url:  POST  [https://mmust-jowa.onrender.com/api/v1/admin/blogs/update /category/<blog_id>]()
+  + replace category with the blog category ie News, Business
+  + replace blog_id with the specific blog id ie 1, 2, 3
+  +
+    ```python
+    headers:
+      content-type: application/json
+    ```
+  +
+    ```python
+    Request Body:
+        title: string
+        slug: string 
+        body: string 
+        image_id: string 
+        category: string
+
+    Example of a request body
+       { 
+        "title": "This is an updated title",
+        "slug": "This is an updated description",
+        "body": "This is an updated body",
+        "image": "This is an updated image",
+        "category": "Either of the following: [News, Business, Sports, Entertainment]"
+
+       }
+    ```
+     The status_code of the response == 202 if the blog was updated~ successfully else a bad request error(400) is thrown. user should ensure that all the fields above are included.
+
      
 ## Delete Blogs 
 #### Admin has the previledge to delete any of his/her blogs
-  + url: DELETE [https://mmust-jowa.onrender.com/api/v1/admin/blogs/delete/category/<image_id>]()
+  + url: DELETE [https://mmust-jowa.onrender.com/api/v1/admin/blogs/delete/category/<id>]()
     - replace category with the exact category
-    - replace <image_id> with the specific image_id 
+    - replace <id> with the specific blog id 
   +
     ```python
     headers:
