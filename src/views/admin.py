@@ -19,7 +19,7 @@ def get_admin_total_blogs():
     author = User.query.filter_by(id=user_id).first()
     author_fullname = f"{author.first_name} {author.last_name}"
     try:
-        res = requests.get(f"http://127.0.0.1:5000/api/v1/user/authorblogs/{author_fullname}")
+        res = requests.get(f"https://mmust-jowa.onrender.com/api/v1/user/authorblogs/{author_fullname}")
         if res.status_code == 200:
             total_blogs = res.json()[0]
             return str(total_blogs), 200
