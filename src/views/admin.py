@@ -259,9 +259,10 @@ def create_a_new_blog():
 
     user_id = get_jwt_identity()
     data = request.get_json()
-    print(data)
     # if validate_blog_data(data):
     base64_string = data['image']
+    print(base64_string)
+    print(data.get("category"))
     base64_string = base64_string.split(",")[1]
     image_data = BytesIO(base64.b64decode(base64_string))
     file = Image.open(image_data)
