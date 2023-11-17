@@ -3,6 +3,7 @@ from decouple import config
 UPLOAD_DIRECTORY = config("UPLOAD_DIRECTORY")
 
 import cloudinary
+import cloudinary.uploader
           
 cloudinary.config( 
   cloud_name = "dqfjiip8v", 
@@ -10,8 +11,9 @@ cloudinary.config(
   api_secret = "oNHvF0SzT4eTB1F6vdefIHH3gAg" 
 )
 
+
 def send_image_to_cloudinary(filename):
     image_path = f"{UPLOAD_DIRECTORY}{filename}"
-    response = cloudinary.uploader.upload(image_path)
+    response = cloudinary.uploader.upload(image_path,  public_id = "magode pic")
     public_url = response['secure_url']
     return public_url
