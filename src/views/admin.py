@@ -4,8 +4,15 @@ from ..models.database import db
 from src.models.database import( User, News, Business, Sports, Entertainment,NewsComments,
 BusinessComments, SportsComments, EntertainmentComments)
 from flask_jwt_extended import get_jwt_identity, jwt_required
-import requests
-import logging
+import os
+import base64
+import uuid
+from werkzeug.utils import secure_filename
+from io import BytesIO
+from PIL import Image
+from decouple import config
+from .uploads import send_image_to_cloudinary
+UPLOAD_DIRECTORY = config("UPLOAD_DIRECTORY")
 
 admin = Blueprint("admin", __name__,)
 
@@ -247,10 +254,23 @@ def get_all_user_entertainment_blogs():
 def create_a_new_blog():
     if not request.content_type == "application/json":
             return jsonify({"failed": "content_type must be application/json"}), 400
+    if not os.path.exists(UPLOAD_DIRECTORY):
+            os.makedirs(UPLOAD_DIRECTORY)
+
     user_id = get_jwt_identity()
     data = request.get_json()
     print(data)
     if validate_blog_data(data):
+        base64_string = data['image']
+        base64_string = base64_string.split(",")[1]
+        image_data = BytesIO(base64.b64decode(base64_string))
+        file = Image.open(image_data)
+        filename = str(uuid.uuid1()) + ".png"
+        file_path = os.path.join(UPLOAD_DIRECTORY, secure_filename(filename))
+        file.save(file_path)
+        data["image_id"] = send_image_to_cloudinary(filename=filename)
+        print(f"{filename} send to cloudinary")
+        
         if data["category"] == "News":
             add_new_blog_data(News, data, user_id)
             return jsonify({"success": f"A new {data['category']}\
