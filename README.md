@@ -699,3 +699,22 @@ A limited number of blogs from each category are displayed here . Blogs are disp
     ```
   - where 1 is the total number of blogs writen by the author
 
+
+ ## Create Comment
+  when a user clicks on a single blog, the frontend sends a request with the image_id related to the blog and the category of the blog to the backed where the backend returns all the info related to the blog. on the url below, replace CATEGORY with the the blog category ie Business and imaged_id with the image id.
+
+  + url: POST  [https://mmust-jowa.onrender.com/api/v1/user/comment/category>/< id>]()
+   + where the category is either News, Business and the id is the image
+   + and id the id associated with that blog
+
+
+    
+  +
+    ```python
+    Response Body of a single blog in the array:
+        content: string
+        is_anonymous: bool optional
+    
+    ```
+    The status_code of the response == 201 if the comment was created successfully else a bad request error(400) error is thrown. user should ensure that comment textbox is filled.
+
