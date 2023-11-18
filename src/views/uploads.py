@@ -14,6 +14,6 @@ cloudinary.config(
 
 def send_image_to_cloudinary(filename):
     image_path = f"{UPLOAD_DIRECTORY}{filename}"
-    response = cloudinary.uploader.upload(image_path,  public_id = "magode pic")
+    response = cloudinary.uploader.upload(image_path,  public_id = "MMUSTJOSA")
     public_url = response['secure_url']
     return public_url
