@@ -246,7 +246,6 @@ def get_all_user_entertainment_blogs():
         (user_blogs=user_news_blogs, comments_model=EntertainmentComments)
     return seliarized_blogs, 200
 
-
 """ An endpoint to create  a blog """
 @admin.route("/createblog", methods=["POST"])
 @cross_origin() 
@@ -254,46 +253,75 @@ def get_all_user_entertainment_blogs():
 def create_a_new_blog():
     if not request.content_type == "application/json":
             return jsonify({"failed": "content_type must be application/json"}), 400
-    if not os.path.exists(UPLOAD_DIRECTORY):
-            os.makedirs(UPLOAD_DIRECTORY)
-
-    user_id = get_jwt_identity()
     data = request.get_json()
-    # if validate_blog_data(data):
-    base64_string = data['image']
-    print(base64_string)
-    print(data.get("category"))
-    base64_string = base64_string.split(",")[1]
-    image_data = BytesIO(base64.b64decode(base64_string))
-    file = Image.open(image_data)
-    filename = str(uuid.uuid1()) + ".png"
-    file_path = os.path.join(UPLOAD_DIRECTORY, secure_filename(filename))
-    file.save(file_path)
-    data["image_id"] = send_image_to_cloudinary(filename=filename)
-    print(f"{filename} send to cloudinary")
-    
-    if data["category"] == "News":
-        add_new_blog_data(News, data, user_id)
-        return jsonify({"success": f"A new {data['category']}\
-                Blog created successfully"}), 201
-    
-    elif data["category"] == "Business":
-        add_new_blog_data(Business, data, user_id)
-        return jsonify({"success": f"A new {data['category']}\
-                Blog created successfully"}), 201
-    
-    elif data["category"] == "Sports":
-        add_new_blog_data(Sports, data, user_id)
-        return jsonify({"success": f"A new {data['category']}\
-                Blog created successfully"}), 201
-    
-    elif data["category"] == "Entertainment":
-        add_new_blog_data(Entertainment, data, user_id)
-        return jsonify({"success": f"A new {data['category']} \
-            Blog created successfully"}), 201
+    user_id = get_jwt_identity()
+    if validate_blog_data(data):
+            if data["category"] == "News":
+                add_new_blog_data(News, data, user_id)
+                return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
+            
+            elif data["category"] == "Business":
+                add_new_blog_data(Business, data, user_id)
+                return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
+            
+            elif data["category"] == "Sports":
+                add_new_blog_data(Sports, data, user_id)
+                return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
+            
+            elif data["category"] == "Entertainment":
+                add_new_blog_data(Entertainment, data, user_id)
+                return jsonify({"success": f"A new {data['category']} Blog created successfully"}), 201
 
-    else:
-     return jsonify({"failed": "All fields are required"}), 400
+        
+    return jsonify({"failed": "All fields are required"}), 400
+
+# """ An endpoint to create  a blog """
+# @admin.route("/createblog", methods=["POST"])
+# @cross_origin() 
+# @jwt_required()
+# def create_a_new_blog():
+#     if not request.content_type == "application/json":
+#             return jsonify({"failed": "content_type must be application/json"}), 400
+#     if not os.path.exists(UPLOAD_DIRECTORY):
+#             os.makedirs(UPLOAD_DIRECTORY)
+
+#     user_id = get_jwt_identity()
+#     data = request.get_json()
+#     # if validate_blog_data(data):
+#     base64_string = data['image']
+#     print(base64_string)
+#     print(data.get("category"))
+#     base64_string = base64_string.split(",")[1]
+#     image_data = BytesIO(base64.b64decode(base64_string))
+#     file = Image.open(image_data)
+#     filename = str(uuid.uuid1()) + ".png"
+#     file_path = os.path.join(UPLOAD_DIRECTORY, secure_filename(filename))
+#     file.save(file_path)
+#     data["image_id"] = send_image_to_cloudinary(filename=filename)
+#     print(f"{filename} send to cloudinary")
+    
+#     if data["category"] == "News":
+#         add_new_blog_data(News, data, user_id)
+#         return jsonify({"success": f"A new {data['category']}\
+#                 Blog created successfully"}), 201
+    
+#     elif data["category"] == "Business":
+#         add_new_blog_data(Business, data, user_id)
+#         return jsonify({"success": f"A new {data['category']}\
+#                 Blog created successfully"}), 201
+    
+#     elif data["category"] == "Sports":
+#         add_new_blog_data(Sports, data, user_id)
+#         return jsonify({"success": f"A new {data['category']}\
+#                 Blog created successfully"}), 201
+    
+#     elif data["category"] == "Entertainment":
+#         add_new_blog_data(Entertainment, data, user_id)
+#         return jsonify({"success": f"A new {data['category']} \
+#             Blog created successfully"}), 201
+
+#     else:
+#      return jsonify({"failed": "All fields are required"}), 400
 
 """ An endpoint to delete a blog based on the category """
 @admin.route("/blogs/delete/<string:category>/<int:id>", methods=["DELETE"])
