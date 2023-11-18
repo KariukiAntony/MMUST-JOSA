@@ -35,6 +35,12 @@ def update_admin_profile():
     #     if not update__admin_login_password(admin_id, data["oldPassword"], data["newPassword"]):
     #         return jsonify({"error": "invalid password. Try again"}), 401
 
+    if "first_name" in data:
+        admin.first_name = data["first_name"]
+
+    if "last_name" in data:
+        admin.last_name = data["last_name"]
+
     if "contact" in data:
         admin.contact = data["contact"]
 
