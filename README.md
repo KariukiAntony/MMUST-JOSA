@@ -472,6 +472,47 @@ User is given an access and a refresh token, while The status_code of the respon
      The status_code of the response == 204 if the blog was deleted successfully else a not found error(404) is thrown. user should ensure that the image id provided is valid.
      
      <br>
+# ADMIN PROFILE
+## Updating admin profile
+  + url: PUT  [https://mmust-jowa.onrender.com/api/v1/admin/update/profile]()
+  +
+    ```python
+    headers:
+      content-type: application/json
+      Authorization: Bearer <token>
+    ```
+  +
+    ```python
+    Request Body:
+        image: base64 optional
+        oldPassword: string optional
+        newPassword: string optional
+        gender: string optional
+        date_of_birth: string optional
+        contact: string optional
+
+    ```
+     The status_code of the response == 202 if the profile was updated successfully else Unaunthorized(401) error is thrown. user should ensure that the oldpassword is correct and the access token provided is valid.
+
+## Get All Admin Profile Info
+ + url: GET  [https://mmust-jowa.onrender.com/api/v1/admin/get/profile]()
+  +
+    ```python
+    headers:
+      content-type: application/json
+      Authorization: Bearer <token>
+    ```
+  +
+    ```python
+    {
+      "contact": "12345678",
+      "date_of_birth": "12/1/2070",
+      "gender": "male",
+      "image_id": null
+    }
+
+    ```
+     The status_code of the response == 200 if the data fetching was a success else Unaunthorized(401) error is thrown. user should ensure that the token provided is valid.
 
 # USERS
 ## Home page of the blog app

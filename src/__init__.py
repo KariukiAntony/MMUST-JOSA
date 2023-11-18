@@ -7,6 +7,7 @@ from src.views.blogs import blogs
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from src.views.admin import admin
+from src.views.admin_profile import admin
 
 
 """ A function for creating an application """

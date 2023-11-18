@@ -445,6 +445,5 @@ def get_total_number_of_post(user_id: int)-> str:
     enta_blogs = get_entertainment_and_comments(user_id= user_id)[0]
     total_blogs = news_blogs+business_blogs+sports_blogs+enta_blogs
     return str(total_blogs)
-          
-            
+                 
 
