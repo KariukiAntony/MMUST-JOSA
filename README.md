@@ -705,13 +705,13 @@ A limited number of blogs from each category are displayed here . Blogs are disp
 
   + url: POST  [https://mmust-jowa.onrender.com/api/v1/user/comment/category>/< id>]()
    + where the category is either News, Business and the id is the image
-   + and id the id associated with that blog
+   + and id is the id associated with that blog
 
 
     
   +
     ```python
-    Response Body of a single blog in the array:
+    Request Body:
         content: string
         is_anonymous: bool optional
     
