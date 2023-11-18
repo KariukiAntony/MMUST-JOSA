@@ -31,15 +31,9 @@ def update_admin_profile():
         admin.image_id = send_image_to_cloudinary(filename=filename)
         print(f"{filename} send to cloudinary")
 
-    if "old_password" in data and "new_password" in data:
-        if not update__admin_login_password(admin_id, data["oldPassword"], data["newPassword"]):
-            return jsonify({"error": "invalid password. Try again"}), 401
-
-    if "gender" in data:
-        admin.gender = data["gender"]
-
-    if "date_of_birth" in data:
-        admin.date_of_birth = data["date_of_birth"]
+    # if "old_password" in data and "new_password" in data:
+    #     if not update__admin_login_password(admin_id, data["oldPassword"], data["newPassword"]):
+    #         return jsonify({"error": "invalid password. Try again"}), 401
 
     if "contact" in data:
         admin.contact = data["contact"]
@@ -56,9 +50,9 @@ def get_admin_profile_info():
     admin_id = get_jwt_identity()
     admin = User.query.filter_by(id=admin_id).first()
     return jsonify({
+        "first_name": admin.first_name,
+        "last_name": admin.last_name,
         "image_id": admin.image_id,
-        "gender": admin.gender,
-        "date_of_birth": admin.date_of_birth,
         "contact": admin.contact,
 
     }), 200

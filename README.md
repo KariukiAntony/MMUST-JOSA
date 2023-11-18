@@ -485,12 +485,9 @@ User is given an access and a refresh token, while The status_code of the respon
     ```python
     Request Body:
         image: base64 optional
-        oldPassword: string optional
-        newPassword: string optional
-        gender: string optional
-        date_of_birth: string optional
+        first_name: string optional
+        last_name: string optional
         contact: string optional
-
     ```
      The status_code of the response == 202 if the profile was updated successfully else Unaunthorized(401) error is thrown. user should ensure that the oldpassword is correct and the access token provided is valid.
 
@@ -506,8 +503,8 @@ User is given an access and a refresh token, while The status_code of the respon
     ```python
     {
       "contact": "12345678",
-      "date_of_birth": "12/1/2070",
-      "gender": "male",
+      "first_name": "Antony",
+      "last_name": "Kariuki",
       "image_id": null
     }
 

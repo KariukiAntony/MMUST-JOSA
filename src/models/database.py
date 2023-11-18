@@ -13,8 +13,6 @@ class User(db.Model):
           email = db.Column(db.String(500), unique=True)
           password = db.Column(db.String(3000), nullable=False)
           image_id = db.Column(db.String(1000), nullable=True, unique=True)
-          gender = db.Column(db.String(100), nullable=True)
-          date_of_birth = db.Column(db.String(100), nullable=True)
           contact = db.Column(db.String(1000), nullable=True, unique=True)
           date_created = db.Column(db.DateTime(timezone=True), default=datetime.now)
           news = db.relationship("News", backref="user", passive_deletes=True)
