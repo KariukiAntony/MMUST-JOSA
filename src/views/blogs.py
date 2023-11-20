@@ -20,10 +20,11 @@ def covert_time_from_GMT_to_EAT(time_):
 def home_page():
     page = request.args.get("page", 1, type=int)
     per_page = request.args.get("pages", 3, type=int)
+    per_page_news = request.args.get("pages", 4, type=int)
 
     response = Response(response=json.dumps({
             
-            "News": get_brief_home_news(News,page, per_page),
+            "News": get_brief_home_news(News,page, per_page_news),
             "Business": get_brief_home_news(Business, page, per_page),
             "Sports": get_brief_home_news(Sports, page, per_page),
             "Entertainment": get_brief_home_news(Entertainment, page, per_page)
@@ -123,7 +124,6 @@ def get_all_user_blogs(fullname):
                print("Total blogs: ", total_blogs)
                 
                return [total_blogs, combined_blogs], 200
-
         else:
             return {"error": f"No user with username {first_name}"}, 400
 

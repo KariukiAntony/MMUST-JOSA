@@ -52,7 +52,7 @@ def get_admin_total_comments():
 @jwt_required()
 def get_latest_five_news_blogs():
     user_id = get_jwt_identity()
-    latest_blogs = News.query.filter_by(author_id=user_id).order_by(News.id.desc()).paginate(page=1, per_page=4, error_out=False)
+    latest_blogs = News.query.filter_by(author_id=user_id).order_by(News.id.desc()).paginate(page=1, per_page=5, error_out=False)
     serialized = []
     for blog in latest_blogs:
         total_comments = len(blog.comments)
