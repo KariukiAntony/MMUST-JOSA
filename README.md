@@ -747,8 +747,10 @@ When a user click on a single blog page, the full content of the blog including 
         "slug": "President Ruto featured on Time Magazine’s ‘Top 100 climate leaders’ list",
         "title": "President Ruto featured on Time Magazine’s ‘Top 100 climate leaders’ list"
       },
-      
+
       ]
     ]
+
+    Where 17 is the total number of blogs written by a author.
     
     ```
