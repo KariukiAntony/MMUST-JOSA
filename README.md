@@ -718,3 +718,37 @@ A limited number of blogs from each category are displayed here . Blogs are disp
     ```
     The status_code of the response == 201 if the comment was created successfully else a bad request error(400) error is thrown. user should ensure that comment textbox is filled.
 
+
+## All Author Blogs 
+When a user click on a single blog page, the full content of the blog including then author is displayed. When a user clicks on the username, the frontend send a request to the backend to get all user blogs.
+
++ url: GET [https://mmust-jowa.onrender.com/api/v1/user/authorblogs/Kingsly Byrone]()
+   + where "Kingsly Byrone" is the username displayed with the blog.
+
+   + The response body is an array where the a single element of the array looks as follows.
+    
+  +
+    ```python
+    Example of request response:
+    [
+      17,
+      [
+
+      {
+        "image_id": "https://res.cloudinary.com/dqfjiip8v/image/upload/v1700478528/MMUSTJOSA.png",
+        "published_on": "Mon, 20 Nov 2023 12:37:00 GMT",
+        "slug": "</Link> jjjj",
+        "title": "Helloooo"
+      },
+
+      {
+        "image_id": "https://buffer.com/library/content/images/2023/10/free-images.jpg",
+        "published_on": "Sat, 18 Nov 2023 11:43:22 GMT",
+        "slug": "President Ruto featured on Time Magazine’s ‘Top 100 climate leaders’ list",
+        "title": "President Ruto featured on Time Magazine’s ‘Top 100 climate leaders’ list"
+      },
+      
+      ]
+    ]
+    
+    ```
