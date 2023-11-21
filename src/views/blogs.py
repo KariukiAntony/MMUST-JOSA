@@ -72,7 +72,7 @@ def get_all_entertainment_blogs():
 
         return all_entertainment, 200
 # best code 
-"""  An endpoint to get the data associated with and image_id presented  """
+"""  An endpoint to get the data associated with the id presented  """
 @blogs.route('/<string:category>/<int:id>')
 @cross_origin() 
 def get_all_info(category, id): 
@@ -220,7 +220,8 @@ def get_blog_info (category, id):
                 "image": data.image_id,
                 "body": data.body,
                 "author": f"{author.first_name} {author.last_name}",
-                "published_on": data.published_on
+                "published_on": data.published_on,
+                "author_image": author.image_id
                  }
                  )
         else:
