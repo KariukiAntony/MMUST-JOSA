@@ -71,7 +71,7 @@ def get_all_entertainment_blogs():
         all_entertainment = get_all_blogs_with_category(model=Entertainment)
 
         return all_entertainment, 200
-# best code 
+
 """  An endpoint to get the data associated with the id presented  """
 @blogs.route('/<string:category>/<int:id>')
 @cross_origin() 
@@ -107,7 +107,23 @@ def get_all_info(category, id):
                 
         return jsonify({"error": "Invalid category"}), 400
 
+"""  An endpoint to get the latest blog in each category"""
+@blogs.route('/blog/latest')
+@cross_origin() 
+def get_latest_blog_per_category() -> str:
+     response = Response(response=json.dumps(
+            {
+                "News": get_latest_blog_per_category(News),
+                "Business": get_latest_blog_per_category(Business),
+                "Sports": get_latest_blog_per_category(Sports),
+                "Entertainment": get_latest_blog_per_category(Entertainment)
+                }
+                ), 
+                status=200, 
+                mimetype="application/json")
 
+     return response, 200
+       
 """ An endpoint to get all the blogs written by the current user """
 @blogs.route("/authorblogs/<string:fullname>")
 @cross_origin() 
@@ -253,5 +269,17 @@ def create_comment (category, category1, id, data):
            return True
 
         return False
+
+""" A function to get the latest blog per category """
+def get_latest_blog_per_category(model):
+        blog = model.query.order_by(model.id.desc()).first()
+        serialized = {
+                       "id": blog.id,
+                        "image": blog.image_id,
+                        "title": blog.title,
+                        "published_on": blog.published_on
+                }
+        
+        return serialized
 
 

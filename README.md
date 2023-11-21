@@ -672,6 +672,26 @@ A limited number of blogs from each category are displayed here . Blogs are disp
 		"title": "This is a long blog"
 	}
     ```
+ ## Latest Blog per category
+
+  + url: GET  [https://mmust-jowa.onrender.com/api/v1/user/blog/latest]()
+
+   +
+    ```python
+    
+    Exampe of a Response Body
+      {
+       "Business": 
+        {
+        "id": 1,
+        "image": "https://buffer.com/library/content/images/2023/10/free-images.jpg",
+         "published_on": "Sat, 18 Nov 2023 14:35:11 GMT",
+         "title": "This news blog was added by daniel"
+        },
+      }
+    
+    ```
+
 
  ## User Blogs
   This endpoint return all the blog associated with the author. 
