@@ -289,16 +289,21 @@ def create_a_new_blog():
     data = request.get_json()
     # if validate_blog_data(data):
     base64_string = data['image']
-    print(base64_string)
-    print(data.get("category"))
-    base64_string = base64_string.split(",")[1]
-    image_data = BytesIO(base64.b64decode(base64_string))
-    file = Image.open(image_data)
-    filename = str(uuid.uuid1()) + ".png"
-    file_path = os.path.join(UPLOAD_DIRECTORY, secure_filename(filename))
-    file.save(file_path)
-    data["image_id"] = send_image_to_cloudinary(filename=filename)
-    print(f"{filename} send to cloudinary")
+    try:
+        base64_string = base64_string.split(",")[1]
+        image_data = BytesIO(base64.b64decode(base64_string))
+        file = Image.open(image_data)
+        filename = str(uuid.uuid1()) + ".png"
+        print("Saving the image to the directory")
+        file_path = os.path.join(UPLOAD_DIRECTORY, secure_filename(filename))
+        file.save(file_path)
+        print("file saved successfully")
+        data["image_id"] = send_image_to_cloudinary(filename=filename)
+        print(f"{filename} send to cloudinary")
+
+    except Exception as e:
+        print(f"An error has occured: {str(e)}")
+        return jsonify({"error": str(e)}), 400
     
     if data["category"] == "News":
         add_new_blog_data(News, data, user_id)
