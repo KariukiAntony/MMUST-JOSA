@@ -1,14 +1,16 @@
 from decouple import config
-
-UPLOAD_DIRECTORY = config("UPLOAD_DIRECTORY")
-
 import cloudinary
 import cloudinary.uploader
-          
+import logging
+import tinify
+
+tinify.key = config("TINIFY_API_KEY")
+UPLOAD_DIRECTORY = config("UPLOAD_DIRECTORY")  
+
 cloudinary.config( 
-  cloud_name = "dqfjiip8v", 
-  api_key = "826449421191762", 
-  api_secret = "oNHvF0SzT4eTB1F6vdefIHH3gAg" 
+  cloud_name = config("cloudname"), 
+  api_key =  config("api_key"), 
+  api_secret = config("api_secret")
 )
 
 
@@ -17,3 +19,15 @@ def send_image_to_cloudinary(filename):
     response = cloudinary.uploader.upload(image_path,  public_id = "MMUSTJOSA")
     public_url = response['secure_url']
     return public_url
+
+
+def compress_image_using_tinify(filename):
+    image_path = f"{UPLOAD_DIRECTORY}{filename}"
+    
+    try:
+        source = tinify.from_file(image_path)
+        source.to_file(image_path)
+        print("Image compressed successfully")
+    
+    except Exception as e:
+        logging.error(f"An error has occured whole compressing the image: {str(e)}")

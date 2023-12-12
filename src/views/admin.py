@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 from io import BytesIO
 from PIL import Image
 from decouple import config
-from .uploads import send_image_to_cloudinary
+from .uploads import send_image_to_cloudinary, compress_image_using_tinify
 UPLOAD_DIRECTORY = config("UPLOAD_DIRECTORY")
 
 admin = Blueprint("admin", __name__,)
@@ -297,7 +297,7 @@ def create_a_new_blog():
         print("Saving the image to the directory")
         file_path = os.path.join(UPLOAD_DIRECTORY, secure_filename(filename))
         file.save(file_path)
-        print("file saved successfully")
+        compress_image_using_tinify(filename)
         data["image_id"] = send_image_to_cloudinary(filename=filename)
         print(f"{filename} send to cloudinary")
 
