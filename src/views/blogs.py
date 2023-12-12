@@ -78,28 +78,28 @@ def get_all_entertainment_blogs():
 def get_all_info(category, id): 
         error_message = {"error": f"{category} Image with id {id} does not exist"}        
         if category == "News":
-                blog_data = get_blog_info(category=News, id=id)
+                blog_data = get_blog_info(category=News, id=id, comments_model=NewsComments)
                 if blog_data:
                        return blog_data, 200
                 
                 return jsonify(error_message), 404
         
         elif category == "Business":
-                blog_data = get_blog_info(category=Business, id=id)
+                blog_data = get_blog_info(category=Business, id=id, comments_model=BusinessComments)
                 if blog_data:
                        return blog_data, 200
                 
                 return jsonify(error_message), 404
         
         elif category == "Sports":
-                blog_data = get_blog_info(category=Sports, id=id)
+                blog_data = get_blog_info(category=Sports, id=id, comments_model=SportsComments)
                 if blog_data:
                         return blog_data, 200
                 
                 return jsonify(error_message), 404
                 
         elif category == "Entertainment":
-                blog_data = get_blog_info(category=Entertainment, id=id)
+                blog_data = get_blog_info(category=Entertainment, id=id, comments_model=EntertainmentComments)
                 if blog_data:
                         return blog_data, 200
                 
@@ -113,10 +113,10 @@ def get_all_info(category, id):
 def get_latest_blog_per_category() -> str:
      response = Response(response=json.dumps(
             {
-                "News": get_latest_blog_per_category(News),
-                "Business": get_latest_blog_per_category(Business),
-                "Sports": get_latest_blog_per_category(Sports),
-                "Entertainment": get_latest_blog_per_category(Entertainment)
+                "News": get_latest_blog_per_category(model=News),
+                # "Business": get_latest_blog_per_category(model=Business),
+                "Sports": get_latest_blog_per_category(model=Sports),
+                # "Entertainment": get_latest_blog_per_category(model=Entertainment)
                 }
                 ), 
                 status=200, 
@@ -226,22 +226,35 @@ def get_all_blogs_with_category(model)-> list:
         return serialized
 
 """ A function to get the all the data of an blog  """
-def get_blog_info (category, id):
+def get_blog_info (category, id, comments_model):
         data = category.query.filter_by(id=id).first()
         if data:
-           author = User.query.filter_by(id=data.author_id).first()
-           return jsonify({
+          blog_comments = comments_model.query.filter_by(blog_id=id)\
+                .order_by(comments_model.id.desc()).all()
+                
+          selialized_comments = []
+          for comment in blog_comments:
+                selialized_comments.append(
+                {
+                        "content": comment.content,
+                        "commented_on": comment.date_created
+                }
+                )
+          author = User.query.filter_by(id=data.author_id).first()
+          return jsonify({
                 "title": data.title,
                 "slug": data.slug,
                 "image": data.image_id,
                 "body": data.body,
                 "author": f"{author.first_name} {author.last_name}",
                 "published_on": data.published_on,
-                "author_image": author.image_id
+                "author_image": author.image_id,
+                "comments": selialized_comments
                  }
                  )
         else:
             return False
+
 
 """ A function to loop through a specific user blogs """
 def get_user_blogs_based_on_category(blogs):
