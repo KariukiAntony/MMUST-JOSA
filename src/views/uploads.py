@@ -3,9 +3,12 @@ import cloudinary
 import cloudinary.uploader
 import logging
 import tinify
+import time
 
 tinify.key = config("TINIFY_API_KEY")
-UPLOAD_DIRECTORY = config("UPLOAD_DIRECTORY")  
+
+UPLOAD_DIRECTORY = config("UPLOAD_DIRECTORY") 
+PUBLIC_ID = config("PUBLIC_ID") 
 
 cloudinary.config( 
   cloud_name = config("cloudname"), 
@@ -16,7 +19,7 @@ cloudinary.config(
 
 def send_image_to_cloudinary(filename):
     image_path = f"{UPLOAD_DIRECTORY}{filename}"
-    response = cloudinary.uploader.upload(image_path,  public_id = "MMUSTJOSA")
+    response = cloudinary.uploader.upload(image_path,  public_id = f"{PUBLIC_ID}_{int(time.time())}",)
     public_url = response['secure_url']
     return public_url
 

@@ -298,7 +298,7 @@ def create_a_new_blog():
         file_path = os.path.join(UPLOAD_DIRECTORY, secure_filename(filename))
         file.save(file_path)
         compress_image_using_tinify(filename)
-        data["image_id"] = send_image_to_cloudinary(filename=filename)
+        data["image_id"] = send_image_to_cloudinary(filename=filename,)
         print(f"{filename} send to cloudinary")
 
     except Exception as e:
