@@ -6,3 +6,4 @@ require.txt
 .flaskenv
 tinify/
 .env
+test.py
