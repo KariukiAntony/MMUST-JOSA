@@ -5,3 +5,4 @@ test1.py
 require.txt
 .flaskenv
 tinify/
+.env
