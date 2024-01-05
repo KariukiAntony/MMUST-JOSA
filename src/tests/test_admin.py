@@ -5,7 +5,7 @@ from .. import create_app, config_dict, db
 class TestAdmin(unittest.TestCase):
 
    def setUp(self) -> None:
-      self.app = create_app(config=config_dict["testing"])
+      self.app = create_app(config=config_dict["test"])
       self.client = self.app.test_client()
       self.app_context = self.app.app_context()
       self.app_context.push()
@@ -14,20 +14,22 @@ class TestAdmin(unittest.TestCase):
    
    def tearDown(self) -> None:
       db.drop_all()
-      self.app_context.pop()
       self.client = None
-      print("database tables dropped")
+      self.app_context.pop()
+      self.app = None
 
    def test_admin_registration(self):
       """
       test if an admin can be created 
       """
-      url = "/api/v1/admin/register"
+      url = "/api/v1/auth/register"
       data = {
          "first_name": "Antony",
          "last_name": "Kariuki",
          "email": "user@gmail.com",
-         "password": "password"
+         "password": "password",
+         "confirm": "password"
       }
-      response = self.client.post(url, json=json.dumps(data))
+      response = self.client.post(url, data=json.dumps(data), content_type="application/json")
+      print(response.text)
       self.assertEqual(response.status_code, 201)
