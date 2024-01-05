@@ -16,6 +16,7 @@ class DevConfig(Config):
 
 
 class TestConfig(DevConfig):
+     SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"
      SQLALCHEMY_TRACK_MODIFICATION = True
      TESTING = True
 

@@ -14,7 +14,7 @@ def register_user():
           error_message = {"Registration failed": "make sure to double check your credentials"}
 
           if not request.content_type == "application/json":
-              return jsonify({"Registration failed": "content_type must be appliaction/json"}), 401
+              return jsonify({"Registration failed": "content_type must be appliaction/json"}), 400
           
           else:
               request_data = request.get_json()

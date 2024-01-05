@@ -7,3 +7,4 @@ require.txt
 tinify/
 .env
 test.py
+.pytest_cache
