@@ -1,6 +1,7 @@
 import json
 import unittest
 from .. import create_app, config_dict, db
+from werkzeug.security import generate_password_hash
 
 class TestAdmin(unittest.TestCase):
 
@@ -11,12 +12,6 @@ class TestAdmin(unittest.TestCase):
       self.app_context.push()
       db.create_all()
       print("database tables created successfully")
-   
-   def tearDown(self) -> None:
-      db.drop_all()
-      self.client = None
-      self.app_context.pop()
-      self.app = None
 
    def test_admin_registration(self):
       """
@@ -31,5 +26,23 @@ class TestAdmin(unittest.TestCase):
          "confirm": "password"
       }
       response = self.client.post(url, data=json.dumps(data), content_type="application/json")
-      print(response.text)
+      # print(response.text)
       self.assertEqual(response.status_code, 201)
+
+   def test_admin_login(self):
+      data = {
+         "email": "user@gmail.com",
+         "password": "password"
+      }
+      url = "/api/v1/auth/login"
+      response = self.client.post(url, json=data)
+      print(response.text)
+      self.assertEqual(response.status_code, 200)
+      
+   
+   def tearDown(self) -> None:
+      """drop the datebase tables
+      """ 
+      db.drop_all()
+      self.client = None
+      self.app_context.pop()
