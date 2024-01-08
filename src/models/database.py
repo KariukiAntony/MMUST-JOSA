@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_migrate import Migrate
-import pytz
 
 db = SQLAlchemy()
 migrate = Migrate()

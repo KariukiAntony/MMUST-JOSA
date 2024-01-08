@@ -1,7 +1,6 @@
 from flask import Flask, jsonify
 from src.config.config import config_dict
 from src.models.database import db, migrate, User
-from os import path
 from src.auth.auth import auth
 from src.views.blogs import blogs
 from flask_jwt_extended import JWTManager
