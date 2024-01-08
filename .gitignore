@@ -3,7 +3,7 @@ __pycache__
 /instance
 test1.py
 require.txt
-.flaskenv
+# .flaskenv
 tinify/
 .env
 test.py
