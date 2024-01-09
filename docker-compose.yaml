@@ -1,11 +1,13 @@
 version: "3.9"
-
 services:
   josa_app:
     image: josa_image
     container_name: josa_container
     build: .
     ports: [5000:5000]
+    volumes:
+      - ./:/Josa/
+
     env_file:
       - ./.env
 
