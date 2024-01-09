@@ -38,7 +38,7 @@ class TestAdmin(unittest.TestCase):
       }
       url = "/api/v1/auth/login"
       response = self.client.post(url, json=data)
-      print(response.text)
+      # print(response.text)
       self.assertEqual(response.status_code, 200)
       
    def test_admin_total_blogs(self):
